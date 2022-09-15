@@ -5,20 +5,21 @@ class Onboarding extends StatefulWidget {
   State<Onboarding> createState() => _OnboardingState();
 }
 
-class OnboardPages {
+class OnboardPage extends StatelessWidget {
   BuildContext context;
   final Color color;
   final String urlImage, title, subtitle;
 
-  OnboardPages({
+  OnboardPage({
     required this.context,
     required this.color,
     required this.urlImage,
     required this.title,
     required this.subtitle
-  }) => build();
+  });
 
-  Widget build() {
+  @override
+  Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -27,8 +28,23 @@ class OnboardPages {
           fit: BoxFit.cover,
           width: MediaQuery.of(this.context).size.width
         ),
+        const SizedBox(height: 10),
         Text(
-          title
+          title,
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold
+          )
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            subtitle,
+            style: TextStyle(
+              fontSize: 15,
+            )
+          )
         )
       ]
     );
@@ -56,12 +72,12 @@ class _OnboardingState extends State<Onboarding> {
           height: screenHeight,
           child: PageView(
             children: <Widget>[
-              buildPage(
+              OnboardPage(
                 context: context,
-                urlImage: 'assets/images/onboarding-1.jpg',
                 color: Colors.green,
-                title: 'Teste1',
-                subtitle: 'opa'
+                urlImage: 'assets/images/onboarding-1.jpg',
+                title: 'Teste',
+                subtitle: 'Teste2'
               )
             ]
           )
