@@ -99,18 +99,50 @@ class _OnboardingState extends State<Onboarding> {
                 ]
               )
             ),
-            ElevatedButton(
-              onPressed: () => _pageController.nextPage(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInOut
-              ),
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder()
-              ),
-              child: Icon(
-                Icons.navigate_next,
-                color: Colors.white
-              )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                SizedBox(
+                  height: 90,
+                  width: 90,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 25),
+                    child: ElevatedButton(
+                      onPressed: () => _pageController.previousPage(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeInOut
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder()
+                      ),
+                      child: Icon(
+                        Icons.navigate_before,
+                        color: Colors.white
+                      )
+                    )
+                  )
+                ),
+                SizedBox(
+                  height: 90,
+                  width: 90,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 25),
+                    child: ElevatedButton(
+                      onPressed: () => _pageController.nextPage(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeInOut
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder()
+                      ),
+                      child: Icon(
+                        Icons.navigate_next,
+                        color: Colors.white
+                      )
+                    )
+                  )
+                )
+              ]
             )
           ]
         )
