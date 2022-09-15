@@ -52,7 +52,7 @@ class OnboardPage extends StatelessWidget {
 }
 
 class _OnboardingState extends State<Onboarding> {
-  late PageController _pageController;
+  final _pageController = PageController(initialPage: 0);
 
   @override
   void dispose() {
@@ -66,21 +66,53 @@ class _OnboardingState extends State<Onboarding> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: screenWidth,
-          height: screenHeight,
-          child: PageView(
-            children: <Widget>[
-              OnboardPage(
-                context: context,
-                color: Colors.green,
-                urlImage: 'assets/images/onboarding-1.jpg',
-                title: 'Teste',
-                subtitle: 'Teste2'
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: PageView(
+                controller: _pageController,
+                children: <Widget>[
+                  OnboardPage(
+                    context: context,
+                    color: Colors.green,
+                    urlImage: 'assets/images/onboarding-1.jpg',
+                    title: 'Teste',
+                    subtitle: 'Teste2'
+                  ),
+                  OnboardPage(
+                    context: context,
+                    color: Colors.green,
+                    urlImage: 'assets/images/onboarding-2.jpg',
+                    title: 'Teste3',
+                    subtitle: 'Teste4'
+                  ),
+                  OnboardPage(
+                    context: context,
+                    color: Colors.green,
+                    urlImage: 'assets/images/onboarding-3.jpg',
+                    title: 'Teste5',
+                    subtitle: 'Teste6'
+                  ),
+                ]
               )
-            ]
-          )
+            ),
+            ElevatedButton(
+              onPressed: () => _pageController.nextPage(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut
+              ),
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder()
+              ),
+              child: Icon(
+                Icons.navigate_next,
+                color: Colors.white
+              )
+            )
+          ]
         )
       )
     );
