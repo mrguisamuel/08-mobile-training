@@ -33,6 +33,15 @@ class SelectEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: const IconButton(
+          icon: Icon(
+            Icons.menu
+          ),
+          onPressed: null
+        ),
+        title: Text('Escolha um evento!')
+      ),
       body: EventListView()
     );
   }
