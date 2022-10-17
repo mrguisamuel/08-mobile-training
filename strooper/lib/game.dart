@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'my_widgets.dart';
+import 'dart:math';
 
 class Game extends StatefulWidget {
   const Game({super.key});
@@ -9,6 +10,36 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
+  final Map<String, MaterialColor> allColors = {
+    'Amarelo' : Colors.yellow,
+    'Azul' : Colors.blue,
+    'Laranja' : Colors.orange,
+    'Vermelho' : Colors.red,
+    'Verde' : Colors.green,
+    'Roxo' : Colors.purple
+  };
+
+  MaterialColor currentColor = Colors.orange;
+  String currentKey = 'Teste';
+
+  void nextRound() {
+    var keys = allColors.keys.toList();
+    var randValue = keys[Random().nextInt(allColors.length)];
+    currentKey = randValue;
+    randValue = keys[Random().nextInt(allColors.length)];
+    setState(() => currentColor = allColors[randValue] ??= Colors.orange);
+  }
+
+  void testColor(bool pressedEqual) {
+    nextRound();
+
+    MaterialColor? tc = allColors[currentKey];
+    
+    bool isEqual = tc == currentColor ? true : false;
+
+    if((pressedEqual && isEqual) || (!pressedEqual && !isEqual)) print('Acertou!');
+    else print('Errou!');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +53,13 @@ class _GameState extends State<Game> {
             children: <Widget>[
               ShowColor(
                 size: 150,
-                currentColor: Colors.orange
+                currentColor: currentColor 
               ),
               SizedBox(
                 height: size.height * 0.03
               ),
               Text(
-                'Teste',
+                currentKey,
                 style: const TextStyle(fontWeight: FontWeight.bold)
               ),
               SizedBox(
@@ -36,14 +67,16 @@ class _GameState extends State<Game> {
               ),
               Button(
                 message: 'Iguais!',
-                width: size.width * 0.8
+                width: size.width * 0.8,
+                action: () => testColor(true) 
               ),
               SizedBox(
                 height: size.height * 0.03
               ),
               Button(
                 message: 'Diferentes!',
-                width: size.width * 0.8
+                width: size.width * 0.8,
+                action: () => testColor(false) 
               )
             ]
           )
