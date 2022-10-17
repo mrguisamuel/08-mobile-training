@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import 'player.dart';
+import 'dart:async';
+import 'dart:ui';
 
 class Game extends StatefulWidget {
   @override
@@ -7,39 +10,38 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  double x = 0, y = 0, z = 0;
-  String direction = 'none';
-  
+  List<double> _accelerometerValues = [0.0, 0.0, 0.0];
+  final _streamSubscriptions = <StreamSubscription<dynamic>>[];
+  int velocity = 5;
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(30),
-        child: Text(direction)
+  void initState() {
+    super.initState();
+    _streamSubscriptions.add(
+      accelerometerEvents.listen(
+        (AccelerometerEvent event) {
+          setState(() {
+            _accelerometerValues = <double>[event.x, event.y, event.z];
+          });
+        }
       )
     );
   }
 
   @override
-  void initState() {
-    super.initState();
-    gyroscopeEvents.listen((GyroscopeEvent event) {
-      print(event);
-      
-      setState(() {
-        x = event.x;
-        y = event.y;
-        z = event.z;
+  Widget build(BuildContext context) {
+    final accelerometer = _accelerometerValues.map((double v) => v.toStringAsFixed(1)).toList();
 
-        if(x > 0)
-          direction = 'back';
-        else if(x < 0)
-          direction = 'forward';
-        else if(y > 0)
-          direction = 'left';
-        else if(y < 0)
-          direction = 'right';
-      }); 
-    });
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          Positioned(
+            left: -velocity * _accelerometerValues[0],
+            top: velocity * _accelerometerValues[1],
+            child: Player()
+          )
+        ]
+      )
+    );
   }
 }
