@@ -23,3 +23,52 @@ class Button extends StatelessWidget {
     );
   }
 }
+
+class CustomProgressBar extends StatelessWidget {
+  final double width;
+  final double value;
+  final double totalValue;
+
+  CustomProgressBar({
+    required this.width, 
+    required this.value, 
+    required this.totalValue
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double ratio = this.value / this.totalValue;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(Icons.timer),
+        SizedBox(width: 5),
+        Stack(
+          children: <Widget>[
+            Container(
+              width: this.width,
+              height: 10,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(5)
+              )
+            ),
+            Material(
+              borderRadius: BorderRadius.circular(5),
+              elevation: 3,
+              child: AnimatedContainer(
+                height: 10,
+                width: this.width * ratio,
+                duration: Duration(milliseconds: 500),
+                decoration: BoxDecoration(
+                  color: (ratio < 0.3) ? Colors.red : (ratio < 0.6) ? Colors.amber[400] : Colors.lightGreen,
+                  borderRadius: BorderRadius.circular(5)
+                )
+              )
+            )
+          ]
+        )
+      ]
+    );
+  }
+}

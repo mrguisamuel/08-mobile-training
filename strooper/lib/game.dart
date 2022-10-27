@@ -77,6 +77,14 @@ class _GameState extends State<Game> {
                 message: 'Diferentes!',
                 width: size.width * 0.8,
                 action: () => testColor(false) 
+              ),
+              SizedBox(
+                height: size.height * 0.03
+              ),
+              CustomProgressBar(
+                width: 200,
+                value: 50,
+                totalValue: 100
               )
             ]
           )
