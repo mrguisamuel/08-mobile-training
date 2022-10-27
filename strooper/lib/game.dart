@@ -81,10 +81,17 @@ class _GameState extends State<Game> {
               SizedBox(
                 height: size.height * 0.03
               ),
+              /*
               CustomProgressBar(
                 width: 200,
                 value: 50,
                 totalValue: 100
+              )
+              */
+              TimerProgressBar(
+                durationSeconds: 3, 
+                width: size.width * 0.6,
+                action: () => nextRound()
               )
             ]
           )
