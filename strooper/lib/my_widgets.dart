@@ -24,10 +24,11 @@ class Button extends StatelessWidget {
   }
 }
 
+// Creating a custom progress bar without LinearProgressIndicator (only for tests)
 class CustomProgressBar extends StatelessWidget {
   final double width;
-  final double value;
-  final double totalValue;
+  final int value;
+  final int totalValue;
 
   CustomProgressBar({
     required this.width, 
@@ -67,6 +68,71 @@ class CustomProgressBar extends StatelessWidget {
               )
             )
           ]
+        )
+      ]
+    );
+  }
+}
+
+class TimerProgressBar extends StatefulWidget {
+  final int durationSeconds;
+  final double width;
+  final VoidCallback? action;
+
+  const TimerProgressBar({
+    super.key, 
+    required this.durationSeconds, 
+    required this.width,
+    this.action = null
+  });
+
+  @override
+  State<TimerProgressBar> createState() => _TimerProgressBarState(duration: this.durationSeconds, action: this.action);
+}
+
+class _TimerProgressBarState extends State<TimerProgressBar> with TickerProviderStateMixin {
+  late AnimationController controller;
+  final int duration;
+  final VoidCallback? action;
+
+  _TimerProgressBarState({
+    required this.duration,
+    this.action = null
+  });
+
+  @override
+  void initState() {
+    this.controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: this.duration)
+    )..addListener(() {
+      setState(() {});
+    });
+    this.controller.forward().whenComplete(() {
+      this.action?.call();
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(Icons.timer),
+        SizedBox(width: 5),
+        SizedBox( 
+          height: 10.0,
+          width: widget.width,
+          child: LinearProgressIndicator(
+            value: this.controller.value
+          )
         )
       ]
     );
