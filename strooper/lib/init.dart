@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'game.dart' show Game;
 import 'my_widgets.dart';
 
 class Init extends StatelessWidget {
@@ -19,7 +20,15 @@ class Init extends StatelessWidget {
             children: <Widget>[
               Button(
                 message: 'Iniciar um jogo normal',
-                width: size.width * 0.8
+                width: size.width * 0.8,
+                action: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Game()
+                    )
+                  );
+                }
               ),
               Button(
                 message: 'Iniciar um jogo customizado',
