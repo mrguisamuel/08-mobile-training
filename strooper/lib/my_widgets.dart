@@ -78,26 +78,34 @@ class TimerProgressBar extends StatefulWidget {
   final int durationSeconds;
   final double width;
   final VoidCallback? action;
-
+  final bool repeat;
+  
   const TimerProgressBar({
-    super.key, 
+    Key? key, 
     required this.durationSeconds, 
     required this.width,
-    this.action = null
-  });
+    this.action = null,
+    this.repeat = false
+  }) : super(key: key);
 
   @override
-  State<TimerProgressBar> createState() => _TimerProgressBarState(duration: this.durationSeconds, action: this.action);
+  State<TimerProgressBar> createState() => TimerProgressBarState(
+    duration: this.durationSeconds, 
+    action: this.action,
+    repeat: this.repeat
+  );
 }
 
-class _TimerProgressBarState extends State<TimerProgressBar> with TickerProviderStateMixin {
+class TimerProgressBarState extends State<TimerProgressBar> with TickerProviderStateMixin {
   late AnimationController controller;
   final int duration;
   final VoidCallback? action;
+  final bool repeat;
 
-  _TimerProgressBarState({
+  TimerProgressBarState({
     required this.duration,
-    this.action = null
+    this.action = null,
+    this.repeat = false
   });
 
   @override
@@ -114,14 +122,15 @@ class _TimerProgressBarState extends State<TimerProgressBar> with TickerProvider
     });
     */
     this.controller.forward();
-    this.controller.addStatusListener((status) {
-      if(status == AnimationStatus.completed) {
-        this.action?.call();
-        this.controller.reset();
-      } else if(status == AnimationStatus.dismissed) {
-        this.controller.forward();
-      }
-    });
+    if(this.repeat) {
+      this.controller.addStatusListener((status) {
+        if(status == AnimationStatus.completed) {
+          this.action?.call();
+          this.resetProgressBar();
+        }
+        else if(status == AnimationStatus.dismissed) this.controller.forward();
+      });
+    }
     super.initState();
   }
 
@@ -147,5 +156,9 @@ class _TimerProgressBarState extends State<TimerProgressBar> with TickerProvider
         )
       ]
     );
+  }
+
+  void resetProgressBar() {
+    this.controller.reset();
   }
 }
