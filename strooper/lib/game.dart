@@ -21,24 +21,51 @@ class _GameState extends State<Game> {
 
   MaterialColor currentColor = Colors.orange;
   String currentKey = 'Teste';
+  int points = 0;
+  GlobalKey<TimerProgressBarState> _key = GlobalKey<TimerProgressBarState>();
 
-  void nextRound() {
+  @override
+  void initState() {
+    this.nextRound(false);
+    super.initState();
+  }
+
+  void nextRound(bool someButtonPressed) {
     var keys = allColors.keys.toList();
     var randValue = keys[Random().nextInt(allColors.length)];
     currentKey = randValue;
     randValue = keys[Random().nextInt(allColors.length)];
+    this._key.currentState?.resetProgressBar();
+    if(!someButtonPressed) this.removePoints();
     setState(() => currentColor = allColors[randValue] ??= Colors.orange);
   }
 
   void testColor(bool pressedEqual) {
-    nextRound();
+    nextRound(true);
 
     MaterialColor? tc = allColors[currentKey];
     
     bool isEqual = tc == currentColor ? true : false;
 
-    if((pressedEqual && isEqual) || (!pressedEqual && !isEqual)) print('Acertou!');
-    else print('Errou!');
+    if(pressedEqual && isEqual) {
+      this.addPoints();
+      print('Acertou!');
+    } else if(!pressedEqual && !isEqual) {
+      this.addPoints();
+      print('Acertou!');
+    }
+    else {
+      this.removePoints();
+      print('Errou!');
+    }
+  }
+
+  void addPoints() {
+    this.points++;
+  }
+
+  void removePoints() {
+    if(this.points > 0) this.points--;
   }
 
   @override
@@ -51,6 +78,19 @@ class _GameState extends State<Game> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,  
             children: <Widget>[
+              TimerProgressBar(
+                durationSeconds: 30, 
+                width: size.width * 0.8,
+              ),
+              SizedBox(
+                height: size.height * 0.03
+              ),
+              Text(
+                'Pontos: ' + points.toString()
+              ),
+              SizedBox(
+                height: size.height * 0.03
+              ),
               ShowColor(
                 size: 150,
                 currentColor: currentColor 
@@ -89,9 +129,11 @@ class _GameState extends State<Game> {
               )
               */
               TimerProgressBar(
+                key: this._key,
                 durationSeconds: 3, 
                 width: size.width * 0.6,
-                action: () => nextRound()
+                action: () => nextRound(false),
+                repeat: true
               )
             ]
           )
