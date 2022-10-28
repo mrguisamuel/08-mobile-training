@@ -20,9 +20,10 @@ class _GameState extends State<Game> {
   };
 
   MaterialColor currentColor = Colors.orange;
-  String currentKey = 'Teste';
+  String currentKey = '';
   int points = 0;
   GlobalKey<TimerProgressBarState> _key = GlobalKey<TimerProgressBarState>();
+  List<Map<String, Object>> answers = [];
 
   @override
   void initState() {
@@ -33,7 +34,7 @@ class _GameState extends State<Game> {
   void nextRound(bool someButtonPressed) {
     var keys = allColors.keys.toList();
     var randValue = keys[Random().nextInt(allColors.length)];
-    currentKey = randValue;
+    this.currentKey = randValue;
     randValue = keys[Random().nextInt(allColors.length)];
     this._key.currentState?.resetProgressBar();
     if(!someButtonPressed) this.removePoints();
@@ -41,23 +42,30 @@ class _GameState extends State<Game> {
   }
 
   void testColor(bool pressedEqual) {
-    nextRound(true);
+    // Save last word
+    Map<String, Object> baseInfo = {};
+    baseInfo['word'] = this.currentkey;
 
+    nextRound(true);
     MaterialColor? tc = allColors[currentKey];
     
     bool isEqual = tc == currentColor ? true : false;
 
     if(pressedEqual && isEqual) {
       this.addPoints();
-      print('Acertou!');
+      baseInfo['correct'] = true;
+      //print('correct answer');
     } else if(!pressedEqual && !isEqual) {
       this.addPoints();
-      print('Acertou!');
+      baseInfo['correct'] = true;
+      //print('correct answer');
     }
     else {
       this.removePoints();
-      print('Errou!');
+      baseInfo['correct'] = false;
+      //print('wrong answer');
     }
+    this.answers.add(baseInfo);
   }
 
   void addPoints() {
