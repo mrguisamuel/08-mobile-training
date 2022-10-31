@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'my_widgets.dart';
 import 'dart:math';
 import 'dart:async';
+import 'utility.dart';
 
 class Game extends StatefulWidget {
   const Game({super.key});
@@ -42,7 +43,7 @@ class _GameState extends State<Game> {
     this.currentKey = randValue;
     randValue = keys[Random().nextInt(allColors.length)];
     this._key.currentState?.resetProgressBar();
-    if(!someButtonPressed) this.removePoints();
+    if(!someButtonPressed) this.removePoints(1);
     setState(() => currentColor = allColors[randValue] ??= Colors.orange);
   }
 
@@ -52,9 +53,11 @@ class _GameState extends State<Game> {
     baseInfo['word'] = this.currentKey;
     
     int percentage = this._key.currentState?.getCurrentValue() ?? 0;
+    double s = (wordTime * percentage) / 100;
     baseInfo['percentage'] = 100 - percentage;
-    
-    nextRound(true);
+    String seconds = (3 - Utility.roundDouble(s, 2)).toString();
+    baseInfo['seconds'] = seconds.characters.take(4);
+
     MaterialColor? tc = allColors[currentKey];
     
     bool isEqual = tc == currentColor ? true : false;
@@ -69,20 +72,23 @@ class _GameState extends State<Game> {
       //print('correct answer');
     }
     else {
-      this.removePoints();
+      this.removePoints(1);
       baseInfo['correct'] = false;
       //print('wrong answer');
     }
     //this.answers.add(baseInfo);
+
+    // Inverse the array to display in ListView
     this.answers.insert(0, baseInfo);
+    nextRound(true);
   }
 
   void addPoints() {
     this.points++;
   }
 
-  void removePoints() {
-    if(this.points > 0) this.points--;
+  void removePoints(int number_points) {
+    if(this.points > 0) this.points -= number_points;
   }
 
   @override
@@ -173,7 +179,7 @@ class _GameState extends State<Game> {
                         color: Colors.red
                       ),
                       title: Text(
-                        '${answers[index]["word"]} - ${answers[index]["percentage"]}%'
+                        '${answers[index]["word"]} - ${answers[index]["percentage"]}% - ${answers[index]["seconds"]} segundos'
                       )
                     );
                   }
