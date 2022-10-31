@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'my_widgets.dart';
 import 'dart:math';
+import 'dart:async';
 
 class Game extends StatefulWidget {
   const Game({super.key});
@@ -19,11 +20,15 @@ class _GameState extends State<Game> {
     'Roxo' : Colors.purple
   };
 
+  static const gameTime = 30;
+  static const wordTime = 3;
+
   MaterialColor currentColor = Colors.orange;
   String currentKey = '';
   int points = 0;
   GlobalKey<TimerProgressBarState> _key = GlobalKey<TimerProgressBarState>();
-  List<Map<String, Object>> answers = [];
+  List<Map<String, Object?>> answers = [];
+  int _counterWord = 0;
 
   @override
   void initState() {
@@ -43,9 +48,12 @@ class _GameState extends State<Game> {
 
   void testColor(bool pressedEqual) {
     // Save last word
-    Map<String, Object> baseInfo = {};
+    Map<String, Object?> baseInfo = {};
     baseInfo['word'] = this.currentKey;
-
+    
+    int percentage = this._key.currentState?.getCurrentValue() ?? 0;
+    baseInfo['percentage'] = 100 - percentage;
+    
     nextRound(true);
     MaterialColor? tc = allColors[currentKey];
     
@@ -88,7 +96,7 @@ class _GameState extends State<Game> {
             crossAxisAlignment: CrossAxisAlignment.center,  
             children: <Widget>[
               TimerProgressBar(
-                durationSeconds: 30, 
+                durationSeconds: gameTime, 
                 width: size.width * 0.8,
               ),
               SizedBox(
@@ -139,7 +147,7 @@ class _GameState extends State<Game> {
               */
               TimerProgressBar(
                 key: this._key,
-                durationSeconds: 3, 
+                durationSeconds: wordTime, 
                 width: size.width * 0.6,
                 action: () => nextRound(false),
                 repeat: true
@@ -153,8 +161,20 @@ class _GameState extends State<Game> {
                 child: ListView.builder(
                   itemCount: answers.length,
                   itemBuilder: (context, index) {
+                    bool status = answers[index]['correct'] as bool;
                     return ListTile(
-                      title: Text('${answers[index]["word"]}')
+                      leading: status ? 
+                      Icon(
+                        Icons.assignment_turned_in_rounded,
+                        color: Colors.green
+                      ) : 
+                      Icon(
+                        Icons.assignment_late_rounded,
+                        color: Colors.red
+                      ),
+                      title: Text(
+                        '${answers[index]["word"]} - ${answers[index]["percentage"]}%'
+                      )
                     );
                   }
                 ),
