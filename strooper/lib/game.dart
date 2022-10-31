@@ -3,6 +3,8 @@ import 'my_widgets.dart';
 import 'dart:math';
 import 'dart:async';
 import 'utility.dart';
+import 'session.dart';
+import 'results.dart';
 
 class Game extends StatefulWidget {
   const Game({super.key});
@@ -26,13 +28,13 @@ class _GameState extends State<Game> {
 
   MaterialColor currentColor = Colors.orange;
   String currentKey = '';
-  int points = 0;
   GlobalKey<TimerProgressBarState> _key = GlobalKey<TimerProgressBarState>();
   List<Map<String, Object?>> answers = [];
   int _counterWord = 0;
 
   @override
   void initState() {
+    Session.resetGame();
     this.nextRound(false);
     super.initState();
   }
@@ -43,17 +45,21 @@ class _GameState extends State<Game> {
     this.currentKey = randValue;
     randValue = keys[Random().nextInt(allColors.length)];
     this._key.currentState?.resetProgressBar();
-    if(!someButtonPressed) this.removePoints(1);
+    if(!someButtonPressed) Session.removePoints(1);
     setState(() => currentColor = allColors[randValue] ??= Colors.orange);
+    Session.totalWords++;
   }
 
   void testColor(bool pressedEqual) {
+    Session.buttonSelectCounter++;
+
     // Save last word
     Map<String, Object?> baseInfo = {};
     baseInfo['word'] = this.currentKey;
     
     int percentage = this._key.currentState?.getCurrentValue() ?? 0;
     double s = (wordTime * percentage) / 100;
+    Session.totalReactTime += Utility.roundDouble(s, 2);
     baseInfo['percentage'] = 100 - percentage;
     String seconds = (3 - Utility.roundDouble(s, 2)).toString();
     baseInfo['seconds'] = seconds.characters.take(4);
@@ -63,27 +69,19 @@ class _GameState extends State<Game> {
     bool isEqual = tc == currentColor ? true : false;
 
     if((pressedEqual && isEqual) || (!pressedEqual && !isEqual)) {
-      this.addPoints();
+      Session.addPoints(1);
       baseInfo['correct'] = true;
+      Session.correctWords++;
       //print('correct answer');
     } else {
-      this.removePoints(1);
+      Session.removePoints(1);
       baseInfo['correct'] = false;
       //print('wrong answer');
     }
     //this.answers.add(baseInfo);
-
     // Inverse the array to display in ListView
     this.answers.insert(0, baseInfo);
     nextRound(true);
-  }
-
-  void addPoints() {
-    this.points++;
-  }
-
-  void removePoints(int number_points) {
-    if(this.points > 0) this.points -= number_points;
   }
 
   @override
@@ -99,12 +97,18 @@ class _GameState extends State<Game> {
               TimerProgressBar(
                 durationSeconds: gameTime, 
                 width: size.width * 0.8,
+                action: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Results()),
+                  );
+                },
               ),
               SizedBox(
                 height: size.height * 0.03
               ),
               Text(
-                'Pontos: ' + points.toString()
+                'Pontos: ' + Session.points.toString()
               ),
               SizedBox(
                 height: size.height * 0.03
