@@ -62,16 +62,11 @@ class _GameState extends State<Game> {
     
     bool isEqual = tc == currentColor ? true : false;
 
-    if(pressedEqual && isEqual) {
+    if((pressedEqual && isEqual) || (!pressedEqual && !isEqual)) {
       this.addPoints();
       baseInfo['correct'] = true;
       //print('correct answer');
-    } else if(!pressedEqual && !isEqual) {
-      this.addPoints();
-      baseInfo['correct'] = true;
-      //print('correct answer');
-    }
-    else {
+    } else {
       this.removePoints(1);
       baseInfo['correct'] = false;
       //print('wrong answer');
