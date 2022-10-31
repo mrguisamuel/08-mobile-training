@@ -44,7 +44,7 @@ class _GameState extends State<Game> {
   void testColor(bool pressedEqual) {
     // Save last word
     Map<String, Object> baseInfo = {};
-    baseInfo['word'] = this.currentkey;
+    baseInfo['word'] = this.currentKey;
 
     nextRound(true);
     MaterialColor? tc = allColors[currentKey];
@@ -65,7 +65,8 @@ class _GameState extends State<Game> {
       baseInfo['correct'] = false;
       //print('wrong answer');
     }
-    this.answers.add(baseInfo);
+    //this.answers.add(baseInfo);
+    this.answers.insert(0, baseInfo);
   }
 
   void addPoints() {
@@ -142,7 +143,22 @@ class _GameState extends State<Game> {
                 width: size.width * 0.6,
                 action: () => nextRound(false),
                 repeat: true
-              )
+              ),
+              SizedBox(
+                height: size.height * 0.03
+              ),
+              Container(
+                width: size.width * 0.9,
+                height: size.height * 0.2,
+                child: ListView.builder(
+                  itemCount: answers.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text('${answers[index]["word"]}')
+                    );
+                  }
+                ),
+              ),
             ]
           )
         )
