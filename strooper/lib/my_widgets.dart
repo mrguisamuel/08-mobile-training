@@ -161,4 +161,9 @@ class TimerProgressBarState extends State<TimerProgressBar> with TickerProviderS
   void resetProgressBar() {
     this.controller.reset();
   }
+
+  int getCurrentValue() {
+    int v = (this.controller.value * 100).toInt();
+    return v;
+  }
 }
