@@ -122,15 +122,13 @@ class TimerProgressBarState extends State<TimerProgressBar> with TickerProviderS
     });
     */
     this.controller.forward();
-    if(this.repeat) {
-      this.controller.addStatusListener((status) {
-        if(status == AnimationStatus.completed) {
-          this.action?.call();
-          this.resetProgressBar();
-        }
-        else if(status == AnimationStatus.dismissed) this.controller.forward();
-      });
-    }
+    this.controller.addStatusListener((status) {
+      if(status == AnimationStatus.completed) {
+        this.action?.call();
+        if(this.repeat) this.resetProgressBar();
+      }
+      else if(status == AnimationStatus.dismissed) this.controller.forward();
+    });
     super.initState();
   }
 
