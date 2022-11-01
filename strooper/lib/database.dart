@@ -63,7 +63,10 @@ class MyDatabase {
 
   Future<List<Record>> getAllRecords() async {
     Database db = await instance.database;
-    List<Map<String, dynamic>> query = await db.query('record');
+    //List<Map<String, dynamic>> query = await db.query('record');
+    List<Map<String, dynamic>> query = await db.rawQuery(
+      'SELECT * FROM record ORDER BY points ASC'
+    );
     List<Record> records = query.isNotEmpty ?
     query.map((r) => Record.fromMap(r)).toList() : [];
     return records;
