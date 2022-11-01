@@ -3,25 +3,25 @@ import 'package:sqflite/sqflite.dart';
 
 class Record {
   final int points;
-  final double averageReactionTime;
+  final double averageReactTime;
   final double averageCorrectWords;
 
   Record({
     required this.points,
-    required this.averageReactionTime,
+    required this.averageReactTime,
     required this.averageCorrectWords
   });
 
   factory Record.fromMap(Map<String, dynamic> data) => new Record(
     points: data['points'],
-    averageReactionTime: data['averageReactionTime'],
+    averageReactTime: data['averageReactTime'],
     averageCorrectWords: data['averageCorrectWords'],
   );
 
   Map<String, dynamic> toMap() {
     return {
       'points': this.points,
-      'averageReactionTime': this.averageReactionTime,
+      'averageReactTime': this.averageReactTime,
       'averageCorrectWords': this.averageCorrectWords,
     };
   }
@@ -37,16 +37,15 @@ class MyDatabase {
 
   Future<Database> _initDatabase() async {
     String databasePath = await getDatabasesPath();
-    print('Database was created!');
     return await openDatabase(
       join(databasePath, databaseName + '.db'),
       onCreate: (database, version) async {
         await database.execute(  
           '''
           CREATE TABLE record(
-            id INTEGER NOT NULL PRIMART KEY AUTOINCREMENT,
+            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             points INTEGER NOT NULL,
-            averageReactionTime REAL NOT NULL,
+            averageReactTime REAL NOT NULL,
             averageCorrectWords REAL NOT NULL
           );
           '''
@@ -54,6 +53,7 @@ class MyDatabase {
       },
       version: 1
     );
+    print('Database was created!');
   }
 
   Future<int> insertRecord(Record record) async {
