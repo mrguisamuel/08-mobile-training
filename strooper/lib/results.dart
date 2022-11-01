@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'session.dart';
 import 'my_widgets.dart';
+import 'database.dart';
 
 class Results extends StatelessWidget {
   const Results({super.key});
 
-  double meanReactTime() {
-    return Session.totalReactTime / Session.buttonSelectCounter;
+  double averageReactTime() {
+    if(Session.buttonSelectCounter == 0)
+      return 0;
+    else
+      return Session.totalReactTime / Session.buttonSelectCounter;
   }
 
-  double meanCorrectWords() {
-    return Session.correctWords / Session.totalWords;
+  double averageCorrectWords() {
+    if(Session.buttonSelectCounter == 0)
+      return 0;
+    else
+      return Session.correctWords / Session.totalWords;
   }
 
   @override
@@ -19,26 +26,24 @@ class Results extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(40),
           child: Column(
             children: <Widget>[
-              Text('Jogo Terminado!\n
-                Resultados:\n
-                Pontos: ${Session.points}\n
-                Tempo Médio de reação: ${this.meanReactTime()}\n
-                Média de acertos: ${this.meanCorrectWords()}\n'
-              ),
+              Text('Jogo Terminado!\n', textAlign: TextAlign.center),
+              Text('Pontos: ${Session.points}\n', textAlign: TextAlign.center),
+              Text('Tempo Médio de reação: ${this.averageReactTime()}\n', textAlign: TextAlign.center),
+              Text('Média de acertos: ${this.averageCorrectWords()}\n', textAlign: TextAlign.center),
               Button(
                 message: 'Compartilhar no Facebook',
-                width: size.width * 0.8;
+                width: size.width * 0.8
               ),
               Button(
                 message: 'Compartilhar no Twitter',
-                width: size.width * 0.8;
+                width: size.width * 0.8
               ),
               Button(
                 message: 'Ver a lista de high scores',
-                width: size.width * 0.8;
+                width: size.width * 0.8
               ),
             ]
           )
