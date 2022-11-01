@@ -3,9 +3,7 @@ import 'game.dart' show Game;
 import 'my_widgets.dart';
 
 class Init extends StatelessWidget {
-  Init({
-    Key? key
-  }) : super(key: key);
+  const Init({super.key});
 
   @override
   Widget build(BuildContext context) {
