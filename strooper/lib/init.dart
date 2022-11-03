@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'game.dart' show Game;
 import 'my_widgets.dart';
+import 'high_score.dart';
 
 class Init extends StatelessWidget {
-  const Init({super.key});
+  const Init({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,18 @@ class Init extends StatelessWidget {
               Button(
                 message: 'Iniciar um jogo customizado',
                 width: size.width * 0.8
+              ),
+              Button(
+                message: 'Ver a lista de high scores',
+                width: size.width * 0.8,
+                action: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HighScore()
+                    )
+                  );
+                }
               )
             ]
           )          
