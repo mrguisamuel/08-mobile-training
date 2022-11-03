@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'database.dart';
 import 'init.dart' show Init;
+import 'utility.dart';
 
 class HighScore extends StatelessWidget {
-  HighScore({super.key});
+  const HighScore({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: const IconButton(
+        leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded),
           onPressed: () {
             Navigator.push(
@@ -39,7 +40,8 @@ class HighScore extends StatelessWidget {
                     child: ListTile(
                       title: Text('${index + 1}º - ' + 
                         '${snapshot.data![index].points} pontos' +
-                        '\nMédia de palavras acertadas: ${snapshot.data![index].averageCorrectWords * 100}%'
+                        '\nMédia de palavras acertadas: ' + 
+                        '${Utility.roundDouble(snapshot.data![index].averageCorrectWords * 100, 2)}%'
                       ),
                     )
                   );
