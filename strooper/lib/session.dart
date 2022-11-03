@@ -1,3 +1,5 @@
+import "package:flutter/material.dart";
+
 class Session {
   static int totalWords = 0;
   static int correctWords = 0;
@@ -5,6 +7,15 @@ class Session {
   static double totalReactTime = 0;
   static bool isDefaultGame = true;
   static int points = 0;
+
+  static Map<String, MaterialColor> allColors = {
+    'Amarelo' : Colors.yellow,
+    'Azul' : Colors.blue,
+    'Laranja' : Colors.orange,
+    'Vermelho' : Colors.red,
+    'Verde' : Colors.green,
+    'Roxo' : Colors.purple,
+  };
 
   static void resetGame() {
     totalWords = 0;
