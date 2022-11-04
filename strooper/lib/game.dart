@@ -22,7 +22,7 @@ class _GameState extends State<Game> {
 
   @override
   void initState() {
-    Session.resetGame();
+    //Session.resetGame();
     this.nextRound(false);
     super.initState();
   }
@@ -36,6 +36,19 @@ class _GameState extends State<Game> {
     if(!someButtonPressed) Session.removePoints(1);
     setState(() => currentColor = Session.allColors[randValue] ??= Colors.orange);
     Session.totalWords++;
+
+    // Only for custom game
+    if(Session.numberOptionSelected) {
+      Session.numberWords--;
+      if(Session.numberWords <= 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Results()
+          )
+        );
+      }
+    }
   }
 
   void testColor(bool pressedEqual) {
@@ -82,15 +95,23 @@ class _GameState extends State<Game> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,  
             children: <Widget>[
-              TimerProgressBar(
-                durationSeconds: Session.seconds, 
-                width: size.width * 0.8,
-                action: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Results()),
-                  );
-                },
+              Visibility(
+                child: TimerProgressBar(
+                  durationSeconds: Session.seconds, 
+                  width: size.width * 0.8,
+                  action: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Results()),
+                    );
+                  },
+                  doNotStart: Session.numberOptionSelected
+                ),
+                visible: !Session.numberOptionSelected
+              ),
+              Visibility(
+                child: Text('Número de palavras restantes: ' + Session.numberWords.toString()),
+                visible: Session.numberOptionSelected
               ),
               SizedBox(
                 height: size.height * 0.03
