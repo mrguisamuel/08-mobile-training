@@ -10,13 +10,73 @@ class CustomGame extends StatefulWidget {
 }
 
 class _CustomGameState extends State<CustomGame> {
+  static const double sizeColors = 55;
+
   String? optionGame = 'number';
   String? optionColors = 'default';
 
-  Widget _createOptionColors(Map<String, MaterialColor> _map, double _size) {
-    List<Widget> colors = [];
+  TextEditingController _numberWordsField = TextEditingController();
+  TextEditingController _minutesField = TextEditingController();
+  TextEditingController _secondsField = TextEditingController();
+  TextEditingController _wordTimeField = TextEditingController();
+
+  List<Widget> colors = [];
+
+  @override
+  void initState() {
+    _numberWordsField.text = Session.numberWords.toString();
+    _minutesField.text = '0';
+    _secondsField.text = Session.seconds.toString();
+    _wordTimeField.text = (Session.secondsPerWord * 1000).toString();
+    _addOptions(Session.allColors);
+    super.initState();
+  }
+
+  void _addOptions(Map<String, MaterialColor> _map) {
     _map.forEach((key, value) {
       colors.add(
+        ColorOption(color: value, size: sizeColors)
+      );
+    });
+  }
+
+  void _goToGame() {
+    Session.resetGame();
+
+    // Test option (number of words or minutes and seconds)
+    if(optionGame == 'number') {
+      Session.numberOptionSelected = true;
+      Session.numberWords = int.parse(_numberWordsField.text);
+    } else {
+      int m = int.parse(_minutesField.text);
+      int s = int.parse(_secondsField.text);
+      Session.seconds = (m * 60) + s;
+    }
+
+    int s = int.parse(_wordTimeField.text);
+    // Convert from milliseconds to seconds
+    double c = s / 1000;
+    Session.secondsPerWord = c.round();
+
+    int index = 0;
+    List<String> colorName = [];
+    for(String key in Session.allColors.keys) {
+      ColorOption c = colors[index] as ColorOption;
+      if(!c.checkboxValue) colorName.add(key);
+      index++;
+    }
+
+    for(int i = 0; i < colorName.length; i++) {
+      Session.allColors.remove(colorName[i]);
+    }
+    
+    //Session.allColors.forEach((k, v) => print(k));
+  }
+
+  Widget _createOptionColors(Map<String, MaterialColor> _map, double _size) {
+    List<Widget> c = [];
+    _map.forEach((key, value) {
+      c.add(
         new Column(
           children: <Widget>[  
             Icon(
@@ -70,9 +130,18 @@ class _CustomGameState extends State<CustomGame> {
                       width: size.width / 4,
                       height: 40,
                       child: TextFormField(
+                        controller: _minutesField,
                         decoration: InputDecoration(
                           hintText: 'Minutos',
-                        )
+                        ),
+                        validator: (text) {
+                          var n = int.parse(text ?? '0');
+                          RegExp exp = new RegExp(r'^\d{1,}$');
+                          if(!exp.hasMatch(text ?? '')) return 'Insira um número!';
+                          else if(n > 60 || n <= 0) return 'Número inválido!';
+                          return null;
+                        },
+                        keyboardType: TextInputType.number
                       )
                     ),
                     SizedBox(
@@ -83,9 +152,18 @@ class _CustomGameState extends State<CustomGame> {
                       width: size.width / 4,
                       height: 40,
                       child: TextFormField(
+                        controller: _secondsField,
                         decoration: InputDecoration(  
                           hintText: 'Segundos',
-                        )
+                        ),
+                        validator: (text) {
+                          var n = int.parse(text ?? '0');
+                          RegExp exp = new RegExp(r'^\d{1,}$');
+                          if(!exp.hasMatch(text ?? '')) return 'Insira um número!';
+                          else if(n > 60 || n <= 0) return 'Número inválido!';
+                          return null;
+                        },
+                        keyboardType: TextInputType.number
                       )
                     )
                   ]
@@ -97,9 +175,18 @@ class _CustomGameState extends State<CustomGame> {
                   width: size.width * 0.8,
                   height: 40, 
                   child: TextFormField(
+                    controller: _numberWordsField,
                     decoration: InputDecoration(
-                      hintText: 'Digite o número de palavras aqui'
-                    )
+                      hintText: 'Número de palavras'
+                    ),
+                    validator: (text) {
+                      var n = int.parse(text ?? '0');
+                      RegExp exp = new RegExp(r'^\d{1,}$');
+                      if(!exp.hasMatch(text ?? '')) return 'Insira um número!';
+                      else if(n > 60 || n <= 0) return 'Número inválido!';
+                      return null;
+                    },
+                    keyboardType: TextInputType.number
                   ),
                 ),
                 visible: optionGame == 'number'
@@ -107,18 +194,27 @@ class _CustomGameState extends State<CustomGame> {
               Spacer(),
               Row(
                 children: <Widget>[
-                  Text('Tempo de uma palavra: '),
+                  Text('Tempo de uma palavra (ms):'),
                   SizedBox(
-                    width: size.width * 0.05,
+                    width: size.width * 0.02,
                     height: 40, 
                   ),
                   SizedBox(
                     width: size.width * 0.4,
                     height: 40, 
                     child: TextFormField(
+                      controller: _wordTimeField,
                       decoration: InputDecoration(
                         hintText: 'em milissegundos'
-                      )
+                      ),
+                      validator: (text) {
+                        var n = int.parse(text ?? '0');
+                        RegExp exp = new RegExp(r'^\d{1,}$');
+                        if(!exp.hasMatch(text ?? '')) return 'Insira um número!';
+                        else if(n > 60 || n <= 0) return 'Número inválido!';
+                        return null;
+                      },
+                      keyboardType: TextInputType.number
                     ),
                   ),
                 ]
@@ -140,16 +236,7 @@ class _CustomGameState extends State<CustomGame> {
               Spacer(),
               //_createOptionColors(Session.allColors, 55),
               Visibility(
-                child: Row(
-                  children: <Widget>[
-                    ColorOption(color: Colors.blue, size: 55),
-                    ColorOption(color: Colors.blue, size: 55),
-                    ColorOption(color: Colors.blue, size: 55),
-                    ColorOption(color: Colors.blue, size: 55),
-                    ColorOption(color: Colors.blue, size: 55),
-                    ColorOption(color: Colors.blue, size: 55),
-                  ]
-                ),
+                child: Row(children: colors),
                 maintainSize: true,
                 maintainAnimation: true,
                 maintainState: true,
@@ -158,7 +245,8 @@ class _CustomGameState extends State<CustomGame> {
               Spacer(),
               Button(
                 message: 'Iniciar Jogo Customizado',
-                width: size.width * 0.9
+                width: size.width * 0.9,
+                action: () => _goToGame()
               )
             ]
           )
@@ -169,12 +257,13 @@ class _CustomGameState extends State<CustomGame> {
 }
 
 class ColorOption extends StatefulWidget {
-  final MaterialColor color;
+  final MaterialColor? color;
   final double size;
+  bool checkboxValue = true;
 
-  const ColorOption({
+  ColorOption({
     Key? key,
-    required this.color,
+    this.color,
     required this.size,
   }) : super(key: key);
 
@@ -183,8 +272,15 @@ class ColorOption extends StatefulWidget {
 }
 
 class _ColorOptionState extends State<ColorOption> {
-  bool checkboxValue = false;
+  /*
+  bool? checkboxValue;
 
+  @override
+  void initState() {
+    checkboxValue = true;
+    super.initState();
+  }
+  */
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -195,8 +291,8 @@ class _ColorOptionState extends State<ColorOption> {
           size: widget.size 
         ),
         Checkbox(
-          value: checkboxValue,
-          onChanged: (bool? value) => setState(() => checkboxValue = value!)
+          value: widget.checkboxValue,
+          onChanged: (bool? value) => setState(() => widget.checkboxValue = value!)
         )
       ],
     );
