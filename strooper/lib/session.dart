@@ -41,6 +41,7 @@ class Session {
     secondsPerWord = 3;
     numberWords = 0;
     numberOptionSelected = false;
+    isDefaultGame = true;
   }
 
   static void addPoints(int numberPoints) {
