@@ -23,11 +23,13 @@ class Results extends StatelessWidget {
   }
 
   Future<void> updateDatabase() async {
+    int i = Session.isDefaultGame ? 0 : 1;
     await MyDatabase.instance.insertRecord(
       Record(
         points: Session.points,
         averageReactTime: this.averageReactTime(),
-        averageCorrectWords: this.averageCorrectWords()
+        averageCorrectWords: this.averageCorrectWords(),
+        isDefaultGame: i
       )
     );
   }

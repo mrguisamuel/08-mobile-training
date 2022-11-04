@@ -5,17 +5,20 @@ class Record {
   final int points;
   final double averageReactTime;
   final double averageCorrectWords;
+  final int isDefaultGame;
 
   Record({
     required this.points,
     required this.averageReactTime,
-    required this.averageCorrectWords
+    required this.averageCorrectWords,
+    required this.isDefaultGame
   });
 
   factory Record.fromMap(Map<String, dynamic> data) => new Record(
     points: data['points'],
     averageReactTime: data['averageReactTime'],
     averageCorrectWords: data['averageCorrectWords'],
+    isDefaultGame: data['isDefaultGame']
   );
 
   Map<String, dynamic> toMap() {
@@ -23,6 +26,7 @@ class Record {
       'points': this.points,
       'averageReactTime': this.averageReactTime,
       'averageCorrectWords': this.averageCorrectWords,
+      'isDefaultGame': this.isDefaultGame
     };
   }
 }
@@ -40,13 +44,14 @@ class MyDatabase {
     return await openDatabase(
       join(databasePath, databaseName + '.db'),
       onCreate: (database, version) async {
-        await database.execute(  
+        await database.execute(
           '''
           CREATE TABLE record(
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             points INTEGER NOT NULL,
             averageReactTime REAL NOT NULL,
-            averageCorrectWords REAL NOT NULL
+            averageCorrectWords REAL NOT NULL,
+            isDefaultGame INTEGER NOT NULL
           );
           '''
         );

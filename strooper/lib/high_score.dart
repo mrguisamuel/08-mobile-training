@@ -36,12 +36,14 @@ class HighScore extends StatelessWidget {
               ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
+                  String gameState = snapshot.data![index].isDefaultGame == 0 ? 'Jogo Normal' : 'Jogo Personalizado' ;
                   return Center(
                     child: ListTile(
                       title: Text('${index + 1}º - ' + 
                         '${snapshot.data![index].points} pontos' +
                         '\nMédia de palavras acertadas: ' + 
-                        '${Utility.roundDouble(snapshot.data![index].averageCorrectWords * 100, 2)}%'
+                        '${Utility.roundDouble(snapshot.data![index].averageCorrectWords * 100, 2)}%\n' +
+                        gameState + '\n' 
                       ),
                     )
                   );
