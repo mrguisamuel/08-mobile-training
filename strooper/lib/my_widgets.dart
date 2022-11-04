@@ -79,20 +79,23 @@ class TimerProgressBar extends StatefulWidget {
   final double width;
   final VoidCallback? action;
   final bool repeat;
-  
+  final bool doNotStart;
+
   const TimerProgressBar({
     Key? key, 
     required this.durationSeconds, 
     required this.width,
     this.action = null,
-    this.repeat = false
+    this.repeat = false,
+    this.doNotStart = false
   }) : super(key: key);
 
   @override
   State<TimerProgressBar> createState() => TimerProgressBarState(
     duration: this.durationSeconds, 
     action: this.action,
-    repeat: this.repeat
+    repeat: this.repeat,
+    doNotStart: this.doNotStart
   );
 }
 
@@ -101,11 +104,13 @@ class TimerProgressBarState extends State<TimerProgressBar> with TickerProviderS
   final int duration;
   final VoidCallback? action;
   final bool repeat;
+  final bool doNotStart;
 
   TimerProgressBarState({
     required this.duration,
     this.action = null,
-    this.repeat = false
+    this.repeat = false,
+    this.doNotStart = false
   });
 
   @override
@@ -121,14 +126,16 @@ class TimerProgressBarState extends State<TimerProgressBar> with TickerProviderS
       this.action?.call();
     });
     */
-    this.controller.forward();
-    this.controller.addStatusListener((status) {
-      if(status == AnimationStatus.completed) {
-        this.action?.call();
-        if(this.repeat) this.resetProgressBar();
-      }
-      else if(status == AnimationStatus.dismissed) this.controller.forward();
-    });
+    if(!this.doNotStart) {
+      this.controller.forward();
+      this.controller.addStatusListener((status) {
+        if(status == AnimationStatus.completed) {
+          this.action?.call();
+          if(this.repeat) this.resetProgressBar();
+        }
+        else if(status == AnimationStatus.dismissed) this.controller.forward();
+      });
+    }
     super.initState();
   }
 
