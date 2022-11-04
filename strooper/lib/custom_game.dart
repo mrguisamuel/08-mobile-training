@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'session.dart';
 import 'my_widgets.dart' show Button;
+import 'game.dart' show Game;
 
 class CustomGame extends StatefulWidget {
   const CustomGame({Key? key}) : super(key: key);
@@ -71,6 +72,14 @@ class _CustomGameState extends State<CustomGame> {
     }
     
     //Session.allColors.forEach((k, v) => print(k));
+    Session.isDefaultGame = false;
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Game()
+      )
+    );
   }
 
   Widget _createOptionColors(Map<String, MaterialColor> _map, double _size) {
