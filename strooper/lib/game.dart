@@ -14,18 +14,6 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  final Map<String, MaterialColor> allColors = {
-    'Amarelo' : Colors.yellow,
-    'Azul' : Colors.blue,
-    'Laranja' : Colors.orange,
-    'Vermelho' : Colors.red,
-    'Verde' : Colors.green,
-    'Roxo' : Colors.purple
-  };
-
-  static const gameTime = 30;
-  static const wordTime = 3;
-
   MaterialColor currentColor = Colors.orange;
   String currentKey = '';
   GlobalKey<TimerProgressBarState> _key = GlobalKey<TimerProgressBarState>();
@@ -40,13 +28,13 @@ class _GameState extends State<Game> {
   }
 
   void nextRound(bool someButtonPressed) {
-    var keys = allColors.keys.toList();
-    var randValue = keys[Random().nextInt(allColors.length)];
+    var keys = Session.allColors.keys.toList();
+    var randValue = keys[Random().nextInt(Session.allColors.length)];
     this.currentKey = randValue;
-    randValue = keys[Random().nextInt(allColors.length)];
+    randValue = keys[Random().nextInt(Session.allColors.length)];
     this._key.currentState?.resetProgressBar();
     if(!someButtonPressed) Session.removePoints(1);
-    setState(() => currentColor = allColors[randValue] ??= Colors.orange);
+    setState(() => currentColor = Session.allColors[randValue] ??= Colors.orange);
     Session.totalWords++;
   }
 
@@ -58,13 +46,13 @@ class _GameState extends State<Game> {
     baseInfo['word'] = this.currentKey;
     
     int percentage = this._key.currentState?.getCurrentValue() ?? 0;
-    double s = (wordTime * percentage) / 100;
+    double s = (Session.secondsPerWord * percentage) / 100;
     Session.totalReactTime += Utility.roundDouble(s, 2);
     baseInfo['percentage'] = 100 - percentage;
     String seconds = (3 - Utility.roundDouble(s, 2)).toString();
     baseInfo['seconds'] = seconds.characters.take(4);
 
-    MaterialColor? tc = allColors[currentKey];
+    MaterialColor? tc = Session.allColors[currentKey];
     
     bool isEqual = tc == currentColor ? true : false;
 
@@ -95,7 +83,7 @@ class _GameState extends State<Game> {
             crossAxisAlignment: CrossAxisAlignment.center,  
             children: <Widget>[
               TimerProgressBar(
-                durationSeconds: gameTime, 
+                durationSeconds: Session.seconds, 
                 width: size.width * 0.8,
                 action: () {
                   Navigator.push(
@@ -152,7 +140,7 @@ class _GameState extends State<Game> {
               */
               TimerProgressBar(
                 key: this._key,
-                durationSeconds: wordTime, 
+                durationSeconds: Session.secondsPerWord, 
                 width: size.width * 0.6,
                 action: () => nextRound(false),
                 repeat: true
