@@ -3,6 +3,7 @@ import 'session.dart';
 import 'my_widgets.dart';
 import 'database.dart';
 import 'utility.dart';
+import 'high_score.dart';
 
 class Results extends StatelessWidget {
   const Results({super.key});
@@ -55,7 +56,15 @@ class Results extends StatelessWidget {
               Button(
                 message: 'Salvar pontuação',
                 width: size.width * 0.8,
-                action: () async => updateDatabase()
+                action: () async {
+                  updateDatabase();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HighScore()
+                    )
+                  );
+                }
               ),
             ]
           )
