@@ -33,7 +33,7 @@ class _CustomGameState extends State<CustomGame> {
     super.initState();
   }
 
-  void _addOptions(Map<String, MaterialColor> _map) {
+  void _addOptions(Map<String, Color> _map) {
     _map.forEach((key, value) {
       colors.add(
         ColorOption(color: value, size: sizeColors)
@@ -266,7 +266,7 @@ class _CustomGameState extends State<CustomGame> {
 }
 
 class ColorOption extends StatefulWidget {
-  final MaterialColor? color;
+  final Color? color;
   final double size;
   bool checkboxValue = true;
 

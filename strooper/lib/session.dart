@@ -14,29 +14,43 @@ class Session {
   static int numberWords = 0;
   static bool numberOptionSelected = false;
 
-  static Map<String, MaterialColor> allColors = {
-    'Amarelo' : Colors.yellow,
-    'Azul' : Colors.blue,
-    'Laranja' : Colors.orange,
-    'Vermelho' : Colors.red,
-    'Verde' : Colors.green,
-    'Roxo' : Colors.purple,
+  static Map<String, Color> allColors = {
+    'Amarelo' : Color(0xFFFFEB3B),
+    'Azul' : Color(0xFF12197F3),
+    'Laranja' : Color(0xFFFF9800),
+    'Vermelho' : Color(0xFFF44336),
+    'Verde' : Color(0xFF4CAF50),
+    'Roxo' : Color(0xFF673AB7),
+    'Preto' : Color(0xFF000000)
   };
 
-  static void resetGame() {
+  static void resetGame([bool isLight = true]) {
     totalWords = 0;
     correctWords = 0;
     buttonSelectCounter = -1;
     totalReactTime = 0;
     points = 0;
-    allColors = {
-        'Amarelo' : Colors.yellow,
-        'Azul' : Colors.blue,
-        'Laranja' : Colors.orange,
-        'Vermelho' : Colors.red,
-        'Verde' : Colors.green,
-        'Roxo' : Colors.purple,
-    };
+    if(isLight) {
+      allColors = {
+        'Amarelo' : Color(0xFFFFEB3B),
+        'Azul' : Color(0xFF12197F3),
+        'Laranja' : Color(0xFFFF9800),
+        'Vermelho' : Color(0xFFF44336),
+        'Verde' : Color(0xFF4CAF50),
+        'Roxo' : Color(0xFF673AB7),
+        'Preto' : Color(0xFF000000)
+      };
+    } else {
+      allColors = {
+        'Amarelo' : Color(0xFFFFEB3B),
+        'Azul' : Color(0xFF12197F3),
+        'Laranja' : Color(0xFFFF9800),
+        'Vermelho' : Color(0xFFF44336),
+        'Verde' : Color(0xFF4CAF50),
+        'Roxo' : Color(0xFF673AB7),
+        'Branco' : Color(0xFFFFFFFF)
+      };
+    }
     seconds = 30;
     secondsPerWord = 3;
     numberWords = 0;

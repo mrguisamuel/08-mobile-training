@@ -14,7 +14,7 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  MaterialColor currentColor = Colors.orange;
+  Color currentColor = Color(0xFFFFFFFF);
   String currentKey = '';
   GlobalKey<TimerProgressBarState> _key = GlobalKey<TimerProgressBarState>();
   List<Map<String, Object?>> answers = [];
@@ -34,7 +34,7 @@ class _GameState extends State<Game> {
     randValue = keys[Random().nextInt(Session.allColors.length)];
     this._key.currentState?.resetProgressBar();
     if(!someButtonPressed) Session.removePoints(1);
-    setState(() => currentColor = Session.allColors[randValue] ??= Colors.orange);
+    setState(() => currentColor = Session.allColors[randValue] ??= Color(0xFF000000));
     Session.totalWords++;
 
     // Only for custom game
@@ -65,7 +65,7 @@ class _GameState extends State<Game> {
     String seconds = (3 - Utility.roundDouble(s, 2)).toString();
     baseInfo['seconds'] = seconds.characters.take(4);
 
-    MaterialColor? tc = Session.allColors[currentKey];
+    Color? tc = Session.allColors[currentKey];
     
     bool isEqual = tc == currentColor ? true : false;
 
@@ -203,7 +203,7 @@ class _GameState extends State<Game> {
 
 class ShowColor extends StatelessWidget {
   final double size;
-  final MaterialColor currentColor;
+  final Color currentColor;
 
   ShowColor({
     Key? key,
