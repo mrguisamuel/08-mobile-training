@@ -11,7 +11,7 @@ class Session {
   // Variables for config the game
   static int seconds = 30;
   static int secondsPerWord = 3;
-  static int numberWords = 0;
+  static int numberWords = 10;
   static bool numberOptionSelected = false;
 
   static Map<String, Color> allColors = {
@@ -53,7 +53,7 @@ class Session {
     }
     seconds = 30;
     secondsPerWord = 3;
-    numberWords = 0;
+    numberWords = 10;
     numberOptionSelected = false;
     isDefaultGame = true;
   }
