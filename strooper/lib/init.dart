@@ -3,6 +3,7 @@ import 'game.dart' show Game;
 import 'my_widgets.dart';
 import 'high_score.dart';
 import 'custom_game.dart';
+import 'session.dart';
 
 class Init extends StatelessWidget {
   const Init({Key? key}) : super(key: key);
@@ -10,7 +11,8 @@ class Init extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    
+    var brightness = MediaQuery.platformBrightnessOf(context);
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -22,6 +24,7 @@ class Init extends StatelessWidget {
                 message: 'Iniciar um jogo normal',
                 width: size.width * 0.8,
                 action: () {
+                  Session.resetGame(brightness == Brightness.light ? true : false);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -34,6 +37,7 @@ class Init extends StatelessWidget {
                 message: 'Iniciar um jogo customizado',
                 width: size.width * 0.8,
                 action: () {
+                  Session.resetGame(brightness == Brightness.light ? true : false);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
