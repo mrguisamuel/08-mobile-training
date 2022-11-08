@@ -70,7 +70,7 @@ class MyDatabase {
     Database db = await instance.database;
     //List<Map<String, dynamic>> query = await db.query('record');
     List<Map<String, dynamic>> query = await db.rawQuery(
-      'SELECT * FROM record ORDER BY points ASC'
+      'SELECT * FROM record ORDER BY points DESC'
     );
     List<Record> records = query.isNotEmpty ?
     query.map((r) => Record.fromMap(r)).toList() : [];
@@ -81,8 +81,8 @@ class MyDatabase {
     Database db = await instance.database;
     //List<Map<String, dynamic>> query = await db.query('record');
     String sqlCommand = isDefaultGame ? 
-    'SELECT * FROM record WHERE isDefaultGame = 0 ORDER BY points ASC' : 
-    'SELECT * FROM record WHERE isDefaultGame = 1 ORDER BY points ASC';
+    'SELECT * FROM record WHERE isDefaultGame = 0 ORDER BY points DESC' : 
+    'SELECT * FROM record WHERE isDefaultGame = 1 ORDER BY points DESC';
 
     List<Map<String, dynamic>> query = await db.rawQuery(sqlCommand);
     List<Record> records = query.isNotEmpty ?
