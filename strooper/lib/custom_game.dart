@@ -11,7 +11,7 @@ class CustomGame extends StatefulWidget {
 }
 
 class _CustomGameState extends State<CustomGame> {
-  static const double sizeColors = 55;
+  static const double sizeColors = 50;
 
   String? optionGame = 'number';
   String? optionColors = 'default';
