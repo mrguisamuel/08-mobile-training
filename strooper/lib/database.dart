@@ -77,6 +77,19 @@ class MyDatabase {
     return records;
   }
 
+  Future<List<Record>> getAllRecordsByType(bool isDefaultGame) async {
+    Database db = await instance.database;
+    //List<Map<String, dynamic>> query = await db.query('record');
+    String sqlCommand = isDefaultGame ? 
+    'SELECT * FROM record WHERE isDefaultGame = 0 ORDER BY points ASC' : 
+    'SELECT * FROM record WHERE isDefaultGame = 1 ORDER BY points ASC';
+
+    List<Map<String, dynamic>> query = await db.rawQuery(sqlCommand);
+    List<Record> records = query.isNotEmpty ?
+    query.map((r) => Record.fromMap(r)).toList() : [];
+    return records;
+  }
+
   Future<void> dispose() async {
     Database db = await instance.database;
     db.close();
