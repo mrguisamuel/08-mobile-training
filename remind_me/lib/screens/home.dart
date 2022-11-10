@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Relembra-me'),
@@ -55,8 +55,12 @@ class _HomeState extends State<Home> {
               ),
               Tab(
                 icon: const Icon(Icons.app_shortcut_rounded),
-                child: const Text('Editar foto')
-              )
+                child: const Text('Editar foto da câmera')
+              ),
+              Tab(
+                icon: const Icon(Icons.app_shortcut_rounded),
+                child: const Text('Usar foto da galeria')
+              ),
             ]
           )
         ),
@@ -118,7 +122,19 @@ class _HomeState extends State<Home> {
                 )
               ),
               SizedBox(
-                child: this.lastImage == null ? Text('tire a foto!') : this.lastImage
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      width: size.width * 0.8,
+                      height: size.height * 0.5,
+                      child: this.lastImage == null ? Text('tire a foto!') : this.lastImage,
+                    ),
+                    ElevatedButton(
+                      child: Text('Usar essa foto mesmo'),
+                      onPressed: null
+                    )
+                  ]
+                )
               )
             ]
           )
