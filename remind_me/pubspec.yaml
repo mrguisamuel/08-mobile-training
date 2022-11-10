@@ -39,6 +39,7 @@ dependencies:
   camera: any
   path_provider: any
   path: any
+  image_picker: any
 
 dev_dependencies:
   flutter_test:
