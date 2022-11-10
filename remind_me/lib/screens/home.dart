@@ -6,9 +6,9 @@ import 'dart:async';
 import 'dart:io';
 
 class Home extends StatefulWidget {
-  final CameraDescription camera;
+  final List<CameraDescription> cameras;
 
-  const Home({Key? key, required this.camera}) : super(key: key);
+  const Home({Key? key, required this.cameras}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -22,17 +22,21 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _controller = CameraController(
-      widget.camera,
-      ResolutionPreset.medium
-    );
-    _initializeControllerFuture = _controller.initialize();
+    startCamera(0);
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void startCamera(int whichCamera) {
+    _controller = CameraController(
+      widget.cameras[whichCamera],
+      ResolutionPreset.medium
+    );
+    _initializeControllerFuture = _controller.initialize();
   }
 
   @override
@@ -85,7 +89,7 @@ class _HomeState extends State<Home> {
                             'Frente',
                             textAlign: TextAlign.center
                           ),
-                          onPressed: null
+                          onPressed: () => setState(() => startCamera(0))
                        ),
                         SizedBox(width: 30),
                         FloatingActionButton(
@@ -93,7 +97,7 @@ class _HomeState extends State<Home> {
                             'Trás',
                             textAlign: TextAlign.center
                           ),
-                          onPressed: null
+                          onPressed: () => setState(() => startCamera(1))
                         )
                       ]
                     ),
