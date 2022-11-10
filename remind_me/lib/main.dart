@@ -4,13 +4,13 @@ import 'package:camera/camera.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final cameras = await availableCameras();
-  final firstCamera = cameras.first;
+  final List<CameraDescription> cameras = await availableCameras();
+
   runApp(
     MaterialApp(
       initialRoute: '/home',
       routes: {
-        '/home': (context) => Home(camera: firstCamera)
+        '/home': (context) => Home(cameras: cameras)
       }
     )
   );
