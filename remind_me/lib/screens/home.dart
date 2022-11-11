@@ -149,7 +149,7 @@ class _HomeState extends State<Home> {
                     ElevatedButton(
                       child: Text('Abrir Galeria'),
                       onPressed: () async {
-                        final XFile? myFile = await _picker.pickImage(source: ImageSource.gallery);
+                        final PickedFile? myFile = await _picker.getImage(source: ImageSource.gallery);
                         setState(() => this.lastImage = Image.file(File(myFile!.path)));
                       }
                     )
