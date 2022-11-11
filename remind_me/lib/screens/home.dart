@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:camera/camera.dart';
+import 'package:image_picker/image_picker.dart';
+import 'editor.dart' show Editor;
 import 'dart:async';
 import 'dart:io';
 
@@ -18,11 +20,13 @@ class _HomeState extends State<Home> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   Image? lastImage;
+  Image? lastImageGallery;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    startCamera(0);
+    _startCamera(0);
   }
 
   @override
@@ -31,7 +35,7 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  void startCamera(int whichCamera) {
+  void _startCamera(int whichCamera) {
     _controller = CameraController(
       widget.cameras[whichCamera],
       ResolutionPreset.medium
@@ -43,23 +47,19 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Relembra-me'),
+          title: Text('Remind-me'),
           bottom: TabBar(
             tabs: <Tab>[
               Tab(
                 icon: const Icon(Icons.add_a_photo_rounded),
-                child: const Text('Tirar foto')
+                child: const Text('Tirar foto', textAlign: TextAlign.center)
               ),
               Tab(
                 icon: const Icon(Icons.app_shortcut_rounded),
-                child: const Text('Editar foto da câmera')
-              ),
-              Tab(
-                icon: const Icon(Icons.app_shortcut_rounded),
-                child: const Text('Usar foto da galeria')
+                child: const Text('Editar foto', textAlign: TextAlign.center)
               ),
             ]
           )
@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
                             'Frente',
                             textAlign: TextAlign.center
                           ),
-                          onPressed: () => setState(() => startCamera(0))
+                          onPressed: () => setState(() => _startCamera(0))
                        ),
                         SizedBox(width: 30),
                         FloatingActionButton(
@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
                             'Trás',
                             textAlign: TextAlign.center
                           ),
-                          onPressed: () => setState(() => startCamera(1))
+                          onPressed: () => setState(() => _startCamera(1))
                         )
                       ]
                     ),
@@ -131,11 +131,31 @@ class _HomeState extends State<Home> {
                     ),
                     ElevatedButton(
                       child: Text('Usar essa foto mesmo'),
-                      onPressed: null
+                      onPressed: () {
+                        if(this.lastImage != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Editor(baseImage: this.lastImage!)
+                            )
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Insira uma imagem antes de continuar!'))
+                          );
+                        }
+                      }
+                    ),
+                    ElevatedButton(
+                      child: Text('Abrir Galeria'),
+                      onPressed: () async {
+                        final XFile? myFile = await _picker.pickImage(source: ImageSource.gallery);
+                        setState(() => this.lastImage = Image.file(File(myFile!.path)));
+                      }
                     )
                   ]
                 )
-              )
+              ),
             ]
           )
         )

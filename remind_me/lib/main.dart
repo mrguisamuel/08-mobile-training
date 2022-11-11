@@ -10,7 +10,7 @@ Future<void> main() async {
     MaterialApp(
       initialRoute: '/home',
       routes: {
-        '/home': (context) => Home(cameras: cameras)
+        '/home': (context) => Home(cameras: cameras),
       }
     )
   );
