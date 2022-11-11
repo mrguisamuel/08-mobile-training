@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'editor.dart' show Editor;
+import 'package:image/image.dart' as ui;
 import 'dart:async';
 import 'dart:io';
 
@@ -19,8 +20,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
-  Image? lastImage;
-  Image? lastImageGallery;
+  File? _lastImage;
+  File _watermarkImage;
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -112,7 +113,7 @@ class _HomeState extends State<Home> {
                         try {
                           await _initializeControllerFuture;
                           final image = await _controller.takePicture();
-                          setState(() => this.lastImage = Image.file(File(image.path)));
+                          setState(() => this._lastImage = File(image.path));
                         } catch(e) {
                           print(e);
                         }
@@ -127,16 +128,22 @@ class _HomeState extends State<Home> {
                     Container(
                       width: size.width * 0.8,
                       height: size.height * 0.5,
-                      child: this.lastImage == null ? Text('tire a foto!') : this.lastImage,
+                      child: this._lastImage == null ? Text('tire a foto!') : Image.file(this._lastImage!),
                     ),
                     ElevatedButton(
                       child: Text('Usar essa foto mesmo'),
-                      onPressed: () {
-                        if(this.lastImage != null) {
+                      onPressed: () async {
+                        ui.Image originalImage = ui.decodeImage(this._lastImage.readAsBytesSync());
+                        ui.Image watermarkImage = ui.decodeImage(this._watermarkImage.readAsBytesSync());
+
+                        ui.Image image = ui.Image(160, 50);
+                        ui.drawImage(image, watermarkImage);
+
+                        if(this._lastImage != null) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Editor(baseImage: this.lastImage!)
+                              builder: (context) => Editor(baseImage: Image.file(this._lastImage!))
                             )
                           );
                         } else {
@@ -150,7 +157,7 @@ class _HomeState extends State<Home> {
                       child: Text('Abrir Galeria'),
                       onPressed: () async {
                         final PickedFile? myFile = await _picker.getImage(source: ImageSource.gallery);
-                        setState(() => this.lastImage = Image.file(File(myFile!.path)));
+                        setState(() => this._lastImage = File(myFile!.path));
                       }
                     )
                   ]
