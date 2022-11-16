@@ -1,0 +1,38 @@
+[  
+  {
+    "description": "Event1",
+    "participants": [
+      "CE",
+      "DCE",
+      "C",
+      "TL"
+    ],
+    "place": "China"
+  },
+  {
+    "description": "Event2",
+    "participants": [
+      "CE",
+      "DCE"
+    ],
+    "place": "USA"
+  },
+  {
+    "description": "Event3",
+    "participants": [
+      "CE",
+      "DCE",
+      "C",
+      "TL"
+    ],
+    "place": "South Korea"
+  },
+  {
+    "description": "Event4",
+    "participants": [
+      "CE",
+      "DCE"
+    ],
+    "place": "Germany"
+  }
+]
