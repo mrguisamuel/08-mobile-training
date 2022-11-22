@@ -26,29 +26,61 @@ class Event {
   };
 }
 
-class EventScreen extends StatelessWidget {
-  EventScreen({Key? key}) : super(key: key);
+class EventScreen extends StatefulWidget {
+  const EventScreen({Key? key}) : super(key: key);
 
-  Future<String> getEventsJson() async => await rootBundle.loadString('events.json');
-  
+  @override
+  State<EventScreen> createState() => _EventScreenState();
+}
+
+class _EventScreenState extends State<EventScreen> {
+  List<dynamic> _items = [];
+  static const int numberDays = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    this.getEventsJson();
+  }
+
+  Future<void> getEventsJson() async {
+    final String response = await rootBundle.loadString('assets/json/events.json');
+    setState(() => this._items = jsonDecode(response));
+  }
+
   @override
   Widget build(BuildContext context) {
-    var event = Event.fromJson(jsonDecode(getEventsJson()));
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Eventos')
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(8),
+    return DefaultTabController(
+      length: numberDays,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Eventos'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(
+                child: Text('eae')
+              ),
+              Tab(
+                child: Text('eae')
+              ),
+              Tab(
+                child: Text('eae')
+              ),
+            ]
+          )
+        ),
+        body: TabBarView(
           children: <Widget>[
-            FutureBuilder<Event>(
-            
-            ), 
-            ListTile(
-              title: const Text('OOOO'),
-              subtitle: const Text('aaaaaa'),
-              leading: const Icon(Icons.help_center_outlined, color: Colors.black)
+            SafeArea(
+              child: ListView.builder(
+                itemCount: _items.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(_items[index]['description']),
+                    subtitle: Text(_items[index]['place'])
+                  );
+                }
+              ),
             )
           ]
         )
