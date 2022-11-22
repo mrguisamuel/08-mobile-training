@@ -35,7 +35,26 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen> {
   List<dynamic> _items = [];
-  static const int numberDays = 3;
+
+  final List<Tab> allTabs = [
+    Tab(child: Text('6 AM')),
+    Tab(child: Text('7 AM')),
+    Tab(child: Text('8 AM')),
+    Tab(child: Text('9 AM')),
+    Tab(child: Text('10 AM')),
+    Tab(child: Text('11 AM')),
+    Tab(child: Text('12 AM')),
+    Tab(child: Text('1 PM')),
+    Tab(child: Text('2 PM')),
+    Tab(child: Text('3 PM')),
+    Tab(child: Text('4 PM')),
+    Tab(child: Text('5 PM')),
+    Tab(child: Text('6 PM')),
+    Tab(child: Text('7 PM')),
+    Tab(child: Text('8 PM')),
+    Tab(child: Text('9 PM')),
+    Tab(child: Text('10 PM'))
+  ];
 
   @override
   void initState() {
@@ -51,22 +70,16 @@ class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: numberDays,
+      length: allTabs.length,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Eventos'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(
-                child: Text('eae')
-              ),
-              Tab(
-                child: Text('eae')
-              ),
-              Tab(
-                child: Text('eae')
-              ),
-            ]
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: TabBar(
+              tabs: this.allTabs,
+              isScrollable: true
+            )
           )
         ),
         body: TabBarView(
@@ -75,13 +88,41 @@ class _EventScreenState extends State<EventScreen> {
               child: ListView.builder(
                 itemCount: _items.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(_items[index]['description']),
-                    subtitle: Text(_items[index]['place'])
-                  );
+                  if(this._items[index]['hour'] == '6 AM') {
+                    return ListTile(
+                      title: Text(this._items[index]['description']),
+                      subtitle: Text(this._items[index]['place'])
+                    );
+                  } else return SizedBox.shrink();
                 }
               ),
-            )
+            ),
+            SafeArea(
+              child: ListView.builder(
+                itemCount: _items.length,
+                itemBuilder: (context, index) {
+                  if(this._items[index]['hour'] == '7 AM') {
+                    return ListTile(
+                      title: Text(this._items[index]['description']),
+                      subtitle: Text(this._items[index]['place'])
+                    );
+                  } else return SizedBox.shrink();
+                }
+              ),
+            ),
+            SafeArea(
+              child: ListView.builder(
+                itemCount: _items.length,
+                itemBuilder: (context, index) {
+                  if(this._items[index]['hour'] == '8 AM') {
+                    return ListTile(
+                      title: Text(this._items[index]['description']),
+                      subtitle: Text(this._items[index]['place'])
+                    );
+                  } else return SizedBox.shrink();
+                }
+              ),
+            ),
           ]
         )
       )
