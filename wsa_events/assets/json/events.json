@@ -7,7 +7,9 @@
       "C",
       "TL"
     ],
-    "place": "China"
+    "place": "China",
+    "hour": "6 AM",
+    "day": 1
   },
   {
     "description": "Event2",
@@ -15,7 +17,9 @@
       "CE",
       "DCE"
     ],
-    "place": "USA"
+    "place": "USA",
+    "hour": "7 AM",
+    "day": 1
   },
   {
     "description": "Event3",
@@ -25,7 +29,9 @@
       "C",
       "TL"
     ],
-    "place": "South Korea"
+    "place": "South Korea",
+    "hour": "7 AM",
+    "day": 2
   },
   {
     "description": "Event4",
@@ -33,6 +39,8 @@
       "CE",
       "DCE"
     ],
-    "place": "Germany"
+    "place": "Germany",
+    "hour": "8 AM",
+    "day": 3
   }
 ]
