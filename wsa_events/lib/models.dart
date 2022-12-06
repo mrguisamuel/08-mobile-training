@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-List<Participant> participantsFromJson(String receivedJson) => List<Participant>.from(
-  jsonDecode(receivedJson).map((x) => Participant.fromJson(x))
+List<Event> eventsFromJson(String receivedJson) => List<Event>.from(
+  jsonDecode(receivedJson).map((x) => Event.fromJson(x))
 );
 
 class Participant {
-  final String id;
+  final int id;
   final String name;
   final String about;
   final String type;
@@ -19,9 +19,9 @@ class Participant {
 
   factory Participant.fromJson(Map<String, dynamic> json) => Participant(
     id: json['id'],
-    name: json['name'],
-    about: json['about'],
-    type: json['type']
+    name: json['nome'],
+    about: json['observacao'],
+    type: json['tipo']
   );
 
   Map<String, dynamic> toJson() => {
@@ -33,7 +33,7 @@ class Participant {
 }
 
 class Event {
-  final String id;
+  final int id;
   final String title;
   final String description;
   final List<Participant> participants;
@@ -49,10 +49,10 @@ class Event {
 
   factory Event.fromJson(Map<String, dynamic> json) => Event(
     id: json['id'],
-    title: json['title'],
-    description: json['description'],
-    participants: participantsFromJson(json['participants']),
-    dateHour: json['dateHour'],
+    title: json['evento'],
+    description: json['descricao'],
+    participants: List<Participant>.from(json['pessoa']?.map((x) => Participant.fromJson(x)) ?? const []),
+    dateHour: json['dataHora'],
   );
 
   Map<String, dynamic> toJson() => {
