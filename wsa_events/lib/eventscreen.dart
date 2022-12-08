@@ -32,12 +32,12 @@ class _EventScreenState extends State<EventScreen> {
     // Remove repeated dates
     this._dates = new List<String>.from(formattedDates.toSet().toList());
     
-    for(int i = 0; i < this._dates.length; i++) {
-      this._allTabs.add(Tab(child: Text(this._dates[i])));
-      this._screens.add(ListEventsView(listEvents: this._allEvents, whichDate: this._dates[i]));
-    }
-    
-    setState(() { });
+    setState(() {
+      for(int i = 0; i < this._dates.length; i++) {
+        this._allTabs.add(Tab(child: Text(this._dates[i])));
+        this._screens.add(ListEventsView(listEvents: this._allEvents, whichDate: this._dates[i]));
+      }
+    });
   }
 
   @override
@@ -62,7 +62,7 @@ class _EventScreenState extends State<EventScreen> {
           )
         ),
         body: TabBarView(
-          children: this._screens
+          children: this._screens.toList()
         )
       )
     );
