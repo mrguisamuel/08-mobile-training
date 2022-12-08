@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'utility.dart';
 
 List<Event> eventsFromJson(String receivedJson) => List<Event>.from(
   jsonDecode(receivedJson).map((x) => Event.fromJson(x))
@@ -38,6 +39,9 @@ class Event {
   final String description;
   final List<Participant> participants;
   final String dateHour;
+  
+  String get date => pickHourAndDate(this.dateHour)[1];
+  String get hour => pickHourAndDate(this.dateHour)[0];
 
   Event({
     required this.id,
