@@ -63,7 +63,7 @@ class _EventScreenState extends State<EventScreen> {
         ),
         body: TabBarView(
           children: this._allTabs.length <= 0 ? 
-          [CircularProgressIndicator()]
+          [SafeArea(child: CircularProgressIndicator())]
           : this._screens.toList()
         )
       )
