@@ -55,7 +55,7 @@ class Event {
     id: json['id'],
     title: json['evento'],
     description: json['descricao'],
-    participants: List<Participant>.from(json['pessoa']?.map((x) => Participant.fromJson(x)) ?? const []),
+    participants: List<Participant>.from(json['pessoas']?.map((x) => Participant.fromJson(x)) ?? const []),
     dateHour: json['dataHora'],
   );
 
