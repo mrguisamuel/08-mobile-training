@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'models.dart';
-import 'utility.dart';
+import 'baseeventscreen.dart';
 
 class ListEventsView extends StatelessWidget {
   final List<Event> listEvents;
@@ -18,12 +18,19 @@ class ListEventsView extends StatelessWidget {
       child: ListView.builder(
         itemCount: this.listEvents.length,
         itemBuilder: (context, index) {
-          List<String> dt = pickHourAndDate(this.listEvents[index].dateHour);
-          if(this.whichDate == dt[1]) {
+          if(this.whichDate == this.listEvents[index].date) {
             return ListTile(
               title: Text(this.listEvents[index].title),
-              subtitle: Text('Horário: ' + dt[0]),
-              leading: const Icon(Icons.addchart_rounded, color: Colors.black)
+              subtitle: Text('Horário: ' + this.listEvents[index].hour),
+              leading: const Icon(Icons.addchart_rounded, color: Colors.black),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => BaseEventScreen(event: this.listEvents[index])
+                  )
+                );
+              }
             );
           } else return Container(height: 0, width: 0);
         }
