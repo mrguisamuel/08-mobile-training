@@ -48,11 +48,15 @@ class _EventScreenState extends State<EventScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: this._allTabs.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Eventos'),
+          title: FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Text('Eventos')
+          ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: TabBar(
@@ -63,7 +67,14 @@ class _EventScreenState extends State<EventScreen> {
         ),
         body: TabBarView(
           children: this._allTabs.length <= 0 ? 
-          [SafeArea(child: CircularProgressIndicator())]
+          [
+            Column(
+              children: <Widget>[
+                SizedBox(height: size.height * 0.5),
+                CircularProgressIndicator()
+              ]
+            )
+          ]
           : this._screens.toList()
         )
       )

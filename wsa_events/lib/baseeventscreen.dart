@@ -14,7 +14,10 @@ class BaseEventScreen extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(event.title)
+        title: FittedBox(
+          fit: BoxFit.fitWidth,
+          child: Text(event.title)
+        )
       ),
       body: SafeArea(
         child: Padding(
