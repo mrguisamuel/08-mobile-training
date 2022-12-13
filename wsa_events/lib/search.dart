@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'globals.dart';
 import 'utility.dart';
 
-enum SearchType {
-  title, description, participants
-}
-
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
@@ -14,8 +10,9 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  String? selectedItem = Globals.allTypes[0];
-  SearchType type = SearchType.title;
+  String? _selectedItem = Globals.allTypes[0];
+  SearchType _type = SearchType.title;
+  TextEditingController _controller = TextEditingController();
   /*
   Map<String, bool> checkboxes = {
     'Título': false,
@@ -48,34 +45,43 @@ class _SearchScreenState extends State<SearchScreen> {
                 RadioListTile<SearchType>(
                   title: Text('Título'),
                   value: SearchType.title,
-                  groupValue: this.type,
+                  groupValue: this._type,
                   onChanged: (SearchType? value) {
-                    setState(() => this.type = value!);
+                    setState(() {
+                      this._type = value!;
+                      this._controller.text = "";
+                    });
                   }
                 ),
                 RadioListTile<SearchType>(
                   title: Text('Descrição'),
                   value: SearchType.description,
-                  groupValue: this.type,
+                  groupValue: this._type,
                   onChanged: (SearchType? value) {
-                    setState(() => this.type = value!);
+                    setState(() {
+                      this._type = value!;
+                      this._controller.text = "";
+                    });
                   }
                 ),
                 RadioListTile<SearchType>(
                   title: Text('Participantes'),
                   value: SearchType.participants,
-                  groupValue: this.type,
+                  groupValue: this._type,
                   onChanged: (SearchType? value) {
-                    setState(() => this.type = value!);
+                    setState(() {
+                      this._type = value!;
+                      this._controller.text = "";
+                    });
                   }
                 ),
                 Visibility(
-                  child: SearchTextField(hint: 'Título'),
-                  visible: this.type == SearchType.title
+                  child: SearchTextField(hint: '', controller: this._controller),
+                  visible: this._type == SearchType.title
                 ),
                 Visibility(
-                  child: SearchTextField(hint: 'Descrição'),
-                  visible: this.type == SearchType.description
+                  child: SearchTextField(hint: '', controller: this._controller),
+                  visible: this._type == SearchType.description
                 ),
                 //SearchTextField(hint: 'Participantes'),
                 Visibility(
@@ -88,18 +94,23 @@ class _SearchScreenState extends State<SearchScreen> {
                         value: item,
                         child: Text(item.splitAndCapitalize('_').join(' ')) 
                       )).toList(),
-                      onChanged: (item) => setState(() => this.selectedItem = item),
-                      value: this.selectedItem
+                      onChanged: (item) => setState(() => this._selectedItem = item),
+                      value: this._selectedItem
                     ),
                   ),
-                  visible: this.type == SearchType.participants
+                  visible: this._type == SearchType.participants
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: FloatingActionButton(
                     child: Icon(Icons.search_rounded),
                     foregroundColor: Colors.white,
-                    onPressed: null
+                    onPressed: () {
+                      Globals.searchType = this._type;
+                      if(Globals.searchType != SearchType.participants)
+                        Globals.searchCharacters = this._controller.text;
+                      Navigator.of(context).pop();
+                    }
                   )
                 )
               ]
@@ -113,9 +124,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
 class SearchTextField extends StatelessWidget {
   final String hint;
+  final TextEditingController controller;
+
   const SearchTextField({
     Key? key,
-    required this.hint
+    required this.hint,
+    required this.controller
   }) : super(key: key);
 
   @override
@@ -127,6 +141,7 @@ class SearchTextField extends StatelessWidget {
         width: size.width * 0.8,
         height: 30,
         child: TextFormField(
+          controller: this.controller,
           decoration: InputDecoration(
             icon: Icon(Icons.person),
             labelText: this.hint
