@@ -4,6 +4,7 @@ import 'models.dart';
 import 'services.dart';
 import 'widgets.dart';
 import 'utility.dart';
+import 'globals.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({Key? key}) : super(key: key);
@@ -44,6 +45,9 @@ class _EventScreenState extends State<EventScreen> {
   @override
   void initState() {
     this._getEvents();
+    if(Globals.searchType == SearchType.title && Globals.searchCharacters.length > 0) {
+      this._searchEvent(Globals.searchCharacters);
+    }
     super.initState();
   }
 
@@ -91,6 +95,16 @@ class _EventScreenState extends State<EventScreen> {
         )
       )
     );
-    return Text('oi');
+  }
+
+  void _searchEvent(String query) {
+    final suggestions = this._allEvents.where((event) {
+      final eventTitle = event.title.toLowerCase();
+      final input = query.toLowerCase();
+
+      return eventTitle.contains(input);
+    }).toList();
+
+    setState(() => this._allEvents = suggestions);
   }
 }
