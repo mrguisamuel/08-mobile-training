@@ -11,7 +11,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: EventScreen()
+      initialRoute: '/events',
+      routes: {
+        '/events': (BuildContext context) => const EventScreen()
+      }
     );
   }
 }
