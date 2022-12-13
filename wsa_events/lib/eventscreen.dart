@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'search.dart';
 import 'models.dart';
 import 'services.dart';
 import 'widgets.dart';
@@ -63,7 +64,18 @@ class _EventScreenState extends State<EventScreen> {
               tabs: this._allTabs,
               isScrollable: true
             )
-          )
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search_rounded),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const SearchScreen()
+                )
+              )
+            )
+          ]
         ),
         body: TabBarView(
           children: this._allTabs.length <= 0 ? 
