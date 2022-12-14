@@ -31,89 +31,95 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Text('Pesquisa')
         )
       ),
-      body: SingleChildScrollView( 
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: <Widget>[
-                /*
-                SearchCheckbox(title: 'Título'),
-                SearchCheckbox(title: 'Descrição'),
-                SearchCheckbox(title: 'Participantes'),
-                */
-                RadioListTile<SearchType>(
-                  title: Text('Título'),
-                  value: SearchType.title,
-                  groupValue: this._type,
-                  onChanged: (SearchType? value) {
-                    setState(() {
-                      this._type = value!;
-                      this._controller.text = "";
-                    });
-                  }
-                ),
-                RadioListTile<SearchType>(
-                  title: Text('Descrição'),
-                  value: SearchType.description,
-                  groupValue: this._type,
-                  onChanged: (SearchType? value) {
-                    setState(() {
-                      this._type = value!;
-                      this._controller.text = "";
-                    });
-                  }
-                ),
-                RadioListTile<SearchType>(
-                  title: Text('Participantes'),
-                  value: SearchType.participants,
-                  groupValue: this._type,
-                  onChanged: (SearchType? value) {
-                    setState(() {
-                      this._type = value!;
-                      this._controller.text = "";
-                    });
-                  }
-                ),
-                Visibility(
-                  child: SearchTextField(hint: '', controller: this._controller),
-                  visible: this._type == SearchType.title
-                ),
-                Visibility(
-                  child: SearchTextField(hint: '', controller: this._controller),
-                  visible: this._type == SearchType.description
-                ),
-                //SearchTextField(hint: 'Participantes'),
-                Visibility(
-                  child: SizedBox(
-                    height: 50,
-                    width: size.width * 0.8,
-                    child: DropdownButton<String>(
-                      isExpanded: true,
-                      items: Globals.allTypes.map((item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(item.splitAndCapitalize('_').join(' ')) 
-                      )).toList(),
-                      onChanged: (item) => setState(() => this._selectedItem = item),
-                      value: this._selectedItem
-                    ),
-                  ),
-                  visible: this._type == SearchType.participants
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: FloatingActionButton(
-                    child: Icon(Icons.search_rounded),
-                    foregroundColor: Colors.white,
-                    onPressed: () {
-                      Globals.searchType = this._type;
-                      if(Globals.searchType != SearchType.participants)
-                        Globals.searchCharacters = this._controller.text;
-                      Navigator.of(context).pop();
+      body: WillPopScope( 
+        onWillPop: () async {
+          Navigator.pop(context, true);
+          return true;
+        },
+        child: SingleChildScrollView( 
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: <Widget>[
+                  /*
+                  SearchCheckbox(title: 'Título'),
+                  SearchCheckbox(title: 'Descrição'),
+                  SearchCheckbox(title: 'Participantes'),
+                  */
+                  RadioListTile<SearchType>(
+                    title: Text('Título'),
+                    value: SearchType.title,
+                    groupValue: this._type,
+                    onChanged: (SearchType? value) {
+                      setState(() {
+                        this._type = value!;
+                        this._controller.text = "";
+                      });
                     }
+                  ),
+                  RadioListTile<SearchType>(
+                    title: Text('Descrição'),
+                    value: SearchType.description,
+                    groupValue: this._type,
+                    onChanged: (SearchType? value) {
+                      setState(() {
+                        this._type = value!;
+                        this._controller.text = "";
+                      });
+                    }
+                  ),
+                  RadioListTile<SearchType>(
+                    title: Text('Participantes'),
+                    value: SearchType.participants,
+                    groupValue: this._type,
+                    onChanged: (SearchType? value) {
+                      setState(() {
+                        this._type = value!;
+                        this._controller.text = "";
+                      });
+                    }
+                  ),
+                  Visibility(
+                    child: SearchTextField(hint: '', controller: this._controller),
+                    visible: this._type == SearchType.title
+                  ),
+                  Visibility(
+                    child: SearchTextField(hint: '', controller: this._controller),
+                    visible: this._type == SearchType.description
+                  ),
+                  //SearchTextField(hint: 'Participantes'),
+                  Visibility(
+                    child: SizedBox(
+                      height: 50,
+                      width: size.width * 0.8,
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        items: Globals.allTypes.map((item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item.splitAndCapitalize('_').join(' ')) 
+                        )).toList(),
+                        onChanged: (item) => setState(() => this._selectedItem = item),
+                        value: this._selectedItem
+                      ),
+                    ),
+                    visible: this._type == SearchType.participants
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: FloatingActionButton(
+                      child: Icon(Icons.search_rounded),
+                      foregroundColor: Colors.white,
+                      onPressed: () {
+                        Globals.searchType = this._type;
+                        if(Globals.searchType != SearchType.participants)
+                          Globals.searchCharacters = this._controller.text;
+                        Navigator.pop(context, Globals.searchCharacters);
+                      }
+                    )
                   )
-                )
-              ]
+                ]
+              )
             )
           )
         )
@@ -121,33 +127,32 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
+  class SearchTextField extends StatelessWidget {
+    final String hint;
+    final TextEditingController controller;
 
-class SearchTextField extends StatelessWidget {
-  final String hint;
-  final TextEditingController controller;
+    const SearchTextField({
+      Key? key,
+      required this.hint,
+      required this.controller
+    }) : super(key: key);
 
-  const SearchTextField({
-    Key? key,
-    required this.hint,
-    required this.controller
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: SizedBox(
-        width: size.width * 0.8,
-        height: 30,
-        child: TextFormField(
-          controller: this.controller,
-          decoration: InputDecoration(
-            icon: Icon(Icons.person),
-            labelText: this.hint
-          ),
-        )
-      ),
+    @override
+    Widget build(BuildContext context) {
+      var size = MediaQuery.of(context).size;
+      return Padding(
+        padding: const EdgeInsets.all(10),
+        child: SizedBox(
+          width: size.width * 0.8,
+          height: 30,
+          child: TextFormField(
+            controller: this.controller,
+            decoration: InputDecoration(
+              icon: Icon(Icons.person),
+              labelText: this.hint
+            ),
+          )
+        ),
     );
   }
 }
