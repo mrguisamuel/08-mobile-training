@@ -15,7 +15,11 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen> {
   EventService _service = EventService();
+  String? _selectedItem = Globals.allTypes[0];
   SearchType _searchType = SearchType.title;
+  bool isSearching = false;
+  TextEditingController _searchFieldController = TextEditingController();
+  var _focusNode = FocusNode();
 
   // They will be generated according to number of events
   List<Tab> _allTabs = [];
@@ -52,16 +56,54 @@ class _EventScreenState extends State<EventScreen> {
     super.initState();
   }
 
+  Widget returnSearchType(double _width) {
+    switch(this._searchType){
+      case SearchType.participants:
+        return SizedBox( 
+          width: _width,
+          height: 50,
+          child: DropdownButton<String>(
+            isExpanded: true,
+            items: Globals.allTypes.map((item) => DropdownMenuItem<String>(
+              value: item,
+              child: Text(item.splitAndCapitalize('_').join(' ')) 
+            )).toList(),
+            onChanged: (item) => setState(() => this._selectedItem = item),
+            value: this._selectedItem
+          )
+        );
+        break;
+      default:
+        return Container(
+          width: _width,
+          height: 50,
+          child: Center(
+            child: TextField(
+              textInputAction: TextInputAction.search,
+              style: const TextStyle(fontSize: 25.0, color: Colors.white),
+              focusNode: this._focusNode,
+              onSubmitted: (value) {
+                this._searchEvent(this._searchFieldController.text);
+                //this.isSearching = false;
+              }
+            )
+          )
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
     return DefaultTabController(
       length: this._allTabs.length,
       child: Scaffold(
         appBar: AppBar(
           title: FittedBox(
             fit: BoxFit.fitWidth,
-            child: Text('Eventos')
+            child: this.isSearching ? this.returnSearchType(size.width) : Text('Eventos')
           ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50),
@@ -72,66 +114,73 @@ class _EventScreenState extends State<EventScreen> {
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.search_rounded),
+              icon: Icon(this.isSearching ? Icons.cancel : Icons.search_rounded),
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          /*
-                          showSearch(
-                            context: context,
-                            delegate: MySearchDelegate(
-                              searchType: this._searchType
-                            )
-                          );
-                          */
-                        },
-                       child: Container(
-                          padding: const EdgeInsets.all(14),
-                          child: const Text('Pesquisar')
+                if(this.isSearching) {
+                  setState(() => isSearching = false);
+                }
+                else {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            this._focusNode.requestFocus();
+                            setState(() => this.isSearching = true);
+                            /*
+                            showSearch(
+                              context: context,
+                              delegate: MySearchDelegate(
+                                searchType: this._searchType
+                              )
+                            );
+                            */
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(14),
+                            child: const Text('Pesquisar')
+                          )
                         )
+                      ],
+                      title: const Text('Pesquisar por:'),
+                      content: StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              RadioListTile<SearchType>(
+                                title: Text('Título'),
+                                value: SearchType.title,
+                                groupValue: this._searchType,
+                                onChanged: (SearchType? value) {
+                                  setState(() => this._searchType = value!);
+                                }
+                              ),
+                              RadioListTile<SearchType>(
+                                title: Text('Descrição'),
+                                value: SearchType.description,
+                                groupValue: this._searchType,
+                                onChanged: (SearchType? value) {
+                                  setState(() => this._searchType = value!);
+                                }
+                              ),
+                              RadioListTile<SearchType>(
+                                title: Text('Participantes'),
+                                value: SearchType.participants,
+                                groupValue: this._searchType,
+                                onChanged: (SearchType? value) {
+                                  setState(() => this._searchType = value!);
+                                }
+                              ),
+                            ]
+                          );
+                        }
                       )
-                    ],
-                    title: const Text('Pesquisar por:'),
-                    content: StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            RadioListTile<SearchType>(
-                              title: Text('Título'),
-                              value: SearchType.title,
-                              groupValue: this._searchType,
-                              onChanged: (SearchType? value) {
-                                setState(() => this._searchType = value!);
-                              }
-                            ),
-                            RadioListTile<SearchType>(
-                              title: Text('Descrição'),
-                              value: SearchType.description,
-                              groupValue: this._searchType,
-                              onChanged: (SearchType? value) {
-                                setState(() => this._searchType = value!);
-                              }
-                            ),
-                            RadioListTile<SearchType>(
-                              title: Text('Participantes'),
-                              value: SearchType.participants,
-                              groupValue: this._searchType,
-                              onChanged: (SearchType? value) {
-                                setState(() => this._searchType = value!);
-                              }
-                            ),
-                          ]
-                        );
-                      }
                     )
-                  )
-                );
+                  );
+                }
               }
 
               /*
