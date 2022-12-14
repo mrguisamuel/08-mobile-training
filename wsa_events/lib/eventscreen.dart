@@ -15,7 +15,8 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen> {
   EventService _service = EventService();
-  
+  SearchType _searchType = SearchType.title;
+
   // They will be generated according to number of events
   List<Tab> _allTabs = [];
   List<Event> _allEvents = [];
@@ -72,12 +73,75 @@ class _EventScreenState extends State<EventScreen> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.search_rounded),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          /*
+                          showSearch(
+                            context: context,
+                            delegate: MySearchDelegate(
+                              searchType: this._searchType
+                            )
+                          );
+                          */
+                        },
+                       child: Container(
+                          padding: const EdgeInsets.all(14),
+                          child: const Text('Pesquisar')
+                        )
+                      )
+                    ],
+                    title: const Text('Pesquisar por:'),
+                    content: StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            RadioListTile<SearchType>(
+                              title: Text('Título'),
+                              value: SearchType.title,
+                              groupValue: this._searchType,
+                              onChanged: (SearchType? value) {
+                                setState(() => this._searchType = value!);
+                              }
+                            ),
+                            RadioListTile<SearchType>(
+                              title: Text('Descrição'),
+                              value: SearchType.description,
+                              groupValue: this._searchType,
+                              onChanged: (SearchType? value) {
+                                setState(() => this._searchType = value!);
+                              }
+                            ),
+                            RadioListTile<SearchType>(
+                              title: Text('Participantes'),
+                              value: SearchType.participants,
+                              groupValue: this._searchType,
+                              onChanged: (SearchType? value) {
+                                setState(() => this._searchType = value!);
+                              }
+                            ),
+                          ]
+                        );
+                      }
+                    )
+                  )
+                );
+              }
+
+              /*
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => const SearchScreen()
                 )
               )
+              */
             )
           ]
         ),
@@ -107,4 +171,54 @@ class _EventScreenState extends State<EventScreen> {
 
     setState(() => this._allEvents = suggestions);
   }
+}
+
+class MySearchDelegate extends SearchDelegate {
+  String? _selectedItem = Globals.allTypes[0];
+  final SearchType searchType;
+
+  MySearchDelegate({
+    required this.searchType,
+  });
+
+  @override
+  String get searchFieldLabel {
+    if(this.searchType == SearchType.description)
+      return 'Descrição';
+    else return 'Título'; 
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) => IconButton(
+    icon: const Icon(Icons.arrow_back_rounded),
+    onPressed: () => close(context, null)
+  );
+
+  @override
+  List<Widget>? buildActions(BuildContext context) => <Widget>[
+    IconButton(
+      icon: const Icon(Icons.clear),
+      onPressed: () {
+        if(this.query.isEmpty) close(context, null);
+        else this.query = '';
+      },
+    )
+  ];
+
+  @override
+  Widget buildResults(BuildContext context) => Container(
+    child: this.searchType == SearchType.participants ? 
+    DropdownButton<String>(
+      isExpanded: true,
+      items: Globals.allTypes.map((item) => DropdownMenuItem<String>(
+        value: item,
+        child: Text(item.splitAndCapitalize('_').join(' ')) 
+      )).toList(),
+      onChanged: (item) => this._selectedItem = item,
+      value: this._selectedItem
+    ) : Text('eae')
+  );
+
+  @override
+  Widget buildSuggestions(BuildContext context) => TextField();
 }
