@@ -50,13 +50,10 @@ class _EventScreenState extends State<EventScreen> {
   @override
   void initState() {
     this._getEvents();
-    if(Globals.searchType == SearchType.title && Globals.searchCharacters.length > 0) {
-      this._searchEvent(Globals.searchCharacters);
-    }
     super.initState();
   }
 
-  Widget returnSearchType(double _width) {
+  Widget _returnSearchType(double _width) {
     switch(this._searchType){
       case SearchType.participants:
         return SizedBox( 
@@ -79,6 +76,7 @@ class _EventScreenState extends State<EventScreen> {
           height: 50,
           child: Center(
             child: TextField(
+              controller: this._searchFieldController,
               textInputAction: TextInputAction.search,
               style: const TextStyle(fontSize: 25.0, color: Colors.white),
               focusNode: this._focusNode,
@@ -103,7 +101,7 @@ class _EventScreenState extends State<EventScreen> {
         appBar: AppBar(
           title: FittedBox(
             fit: BoxFit.fitWidth,
-            child: this.isSearching ? this.returnSearchType(size.width) : Text('Eventos')
+            child: this.isSearching ? this._returnSearchType(size.width) : Text('Eventos')
           ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50),
@@ -218,7 +216,9 @@ class _EventScreenState extends State<EventScreen> {
       return eventTitle.contains(input);
     }).toList();
 
-    setState(() => this._allEvents = suggestions);
+    print(suggestions);
+
+    //setState(() => this._allEvents = suggestions);
   }
 }
 
