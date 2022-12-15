@@ -39,6 +39,12 @@ class _EventScreenState extends State<EventScreen> {
     // Remove repeated dates
     this._dates = new List<String>.from(formattedDates.toSet().toList());
     
+    this._resetAllScreens();
+  }
+
+  void _resetAllScreens() {
+    this._allTabs.clear();
+    this._screens.clear();
     setState(() {
       for(int i = 0; i < this._dates.length; i++) {
         this._allTabs.add(Tab(child: Text(this._dates[i])));
@@ -106,7 +112,7 @@ class _EventScreenState extends State<EventScreen> {
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: TabBar(
-              tabs: this._allTabs,
+              tabs: this._allTabs.toList(),
               isScrollable: true
             )
           ),
@@ -116,6 +122,7 @@ class _EventScreenState extends State<EventScreen> {
               onPressed: () {
                 if(this.isSearching) {
                   setState(() => isSearching = false);
+                  this._getEvents();
                 }
                 else {
                   showDialog(
@@ -216,9 +223,10 @@ class _EventScreenState extends State<EventScreen> {
       return eventTitle.contains(input);
     }).toList();
 
-    print(suggestions);
+    //print(suggestions);
 
-    //setState(() => this._allEvents = suggestions);
+    this._allEvents = suggestions;
+    this._resetAllScreens();
   }
 }
 
