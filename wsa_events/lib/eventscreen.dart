@@ -5,6 +5,7 @@ import 'services.dart';
 import 'widgets.dart';
 import 'utility.dart';
 import 'globals.dart';
+import 'settings.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({Key? key}) : super(key: key);
@@ -158,7 +159,11 @@ class _EventScreenState extends State<EventScreen> {
               ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Configurações do aplicativo'),
-                onTap: null
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const SettingsScreen()
+                  )
+                )
               ),
               ListTile(
                 leading: const Icon(Icons.calendar_month_rounded),

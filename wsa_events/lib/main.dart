@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'eventscreen.dart';
+import 'settings.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/events',
       routes: {
-        '/events': (BuildContext context) => const EventScreen()
+        '/events': (BuildContext context) => const EventScreen(),
+        '/settings': (BuildContext context) => const SettingsScreen()
       }
     );
   }
