@@ -109,14 +109,26 @@ class _EventScreenState extends State<EventScreen> {
         return Container(
           width: _width,
           height: 50,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white
+          ),
           child: Center(
             child: TextField(
               controller: this._searchFieldController,
               onChanged: (text) {
                 if(text == ' ') text = '';
               },
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+              ),
               textInputAction: TextInputAction.search,
-              style: const TextStyle(fontSize: 25.0, color: Colors.white),
+              style: const TextStyle(fontSize: 25.0, color: Colors.black),
               focusNode: this._focusNode,
               onSubmitted: (value) {
                 this._searchEvent(this._searchFieldController.text);
