@@ -25,32 +25,61 @@ class _EventScreenState extends State<EventScreen> {
   List<Tab> _allTabs = [];
   List<Event> _allEvents = [];
   List<String> _dates = [];
-  List<ListEventsView> _screens = [];
+  List<Widget> _screens = [];
 
   Future<void> _getEvents() async {
     this._allEvents = await this._service.getEvents();
-    var formattedDates = [];
+    this._createAllScreens();
+  }
 
-    this._allEvents.forEach((event) {
-      final d = event.dateHour.split('T');
-      formattedDates.add(formatDate(d[0]));
-    });
-
-    // Remove repeated dates
-    this._dates = new List<String>.from(formattedDates.toSet().toList());
-    
-    this._resetAllScreens();
+  void _removeAllScreens() {
+    // Reset all lists
+    this._allTabs.clear();
+    this._allEvents.clear();
+    this._dates.clear();
+    this._screens.clear();
   }
 
   void _resetAllScreens() {
-    this._allTabs.clear();
-    this._screens.clear();
-    setState(() {
-      for(int i = 0; i < this._dates.length; i++) {
-        this._allTabs.add(Tab(child: Text(this._dates[i])));
-        this._screens.add(ListEventsView(listEvents: this._allEvents, whichDate: this._dates[i]));
-      }
-    });
+    this._removeAllScreens();
+    this._getEvents();
+  }
+
+  void _createAllScreens() {
+    if(this._allEvents.length > 0) {
+      var formattedDates = [];
+      
+      this._allEvents.forEach((event) {
+        final d = event.dateHour.split('T');
+        formattedDates.add(formatDate(d[0]));
+      });
+
+      // Remove repeated dates
+      this._dates = new List<String>.from(formattedDates.toSet().toList());
+
+      setState(() {
+        for(int i = 0; i < this._dates.length; i++) {
+          this._allTabs.add(Tab(child: Text(this._dates[i])));
+          this._screens.add(ListEventsView(listEvents: this._allEvents, whichDate: this._dates[i]));
+        }
+      });
+    } else {
+      this._allTabs.add(Tab(child: Text('Erro')));
+      this._screens.add(
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(30),
+            child: Text(
+              'Não foram encontrados eventos.\nTente pesquisar novamente!',
+              style: const TextStyle(
+                fontSize: 20
+              ),
+              textAlign: TextAlign.center
+            )
+          )
+        )
+      );
+    }
   }
 
   @override
@@ -83,11 +112,15 @@ class _EventScreenState extends State<EventScreen> {
           child: Center(
             child: TextField(
               controller: this._searchFieldController,
+              onChanged: (text) {
+                if(text == ' ') text = '';
+              },
               textInputAction: TextInputAction.search,
               style: const TextStyle(fontSize: 25.0, color: Colors.white),
               focusNode: this._focusNode,
               onSubmitted: (value) {
                 this._searchEvent(this._searchFieldController.text);
+                print(this._screens.length);
                 //this.isSearching = false;
               }
             )
@@ -122,7 +155,8 @@ class _EventScreenState extends State<EventScreen> {
               onPressed: () {
                 if(this.isSearching) {
                   setState(() => isSearching = false);
-                  this._getEvents();
+                  this._resetAllScreens();
+                  this._searchFieldController.text = '';
                 }
                 else {
                   showDialog(
@@ -216,6 +250,8 @@ class _EventScreenState extends State<EventScreen> {
   }
 
   void _searchEvent(String query) {
+    if(query == '') return;
+
     final suggestions = this._allEvents.where((event) {
       final eventTitle = event.title.toLowerCase();
       final input = query.toLowerCase();
@@ -223,10 +259,9 @@ class _EventScreenState extends State<EventScreen> {
       return eventTitle.contains(input);
     }).toList();
 
-    //print(suggestions);
-
+    this._removeAllScreens();
     this._allEvents = suggestions;
-    this._resetAllScreens();
+    this._createAllScreens();
   }
 }
 
