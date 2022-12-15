@@ -131,8 +131,8 @@ class _EventScreenState extends State<EventScreen> {
               style: const TextStyle(fontSize: 25.0, color: Colors.black),
               focusNode: this._focusNode,
               onSubmitted: (value) {
-                this._searchEvent(this._searchFieldController.text);
-                print(this._screens.length);
+                this._searchEvent(this._searchFieldController.text, this._searchType);
+                //print(this._screens.length);
                 //this.isSearching = false;
               }
             )
@@ -149,6 +149,25 @@ class _EventScreenState extends State<EventScreen> {
     return DefaultTabController(
       length: this._allTabs.length,
       child: Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            children: <Widget>[
+              DrawerHeader(
+                child: Icon(Icons.adb_rounded, size: 50)
+              ),
+              ListTile(
+                leading: const Icon(Icons.settings),
+                title: const Text('Configurações do aplicativo'),
+                onTap: null
+              ),
+              ListTile(
+                leading: const Icon(Icons.calendar_month_rounded),
+                title: const Text('Exportar eventos para o calendário'),
+                onTap: null
+              )
+            ]
+          )
+        ),
         appBar: AppBar(
           title: FittedBox(
             fit: BoxFit.fitWidth,
@@ -261,14 +280,25 @@ class _EventScreenState extends State<EventScreen> {
     );
   }
 
-  void _searchEvent(String query) {
+  void _searchEvent(String query, SearchType type) {
     if(query == '') return;
 
-    final suggestions = this._allEvents.where((event) {
-      final eventTitle = event.title.toLowerCase();
-      final input = query.toLowerCase();
+    String base = '';
 
-      return eventTitle.contains(input);
+    final suggestions = this._allEvents.where((event) {
+      switch(type) {
+        case SearchType.participants:
+          break;
+        case SearchType.description:
+          base = event.description.toLowerCase();
+          break;
+        default:
+          base = event.title.toLowerCase();
+          break;
+      }
+      
+      final input = query.toLowerCase();
+      return base.contains(input);
     }).toList();
 
     this._removeAllScreens();
