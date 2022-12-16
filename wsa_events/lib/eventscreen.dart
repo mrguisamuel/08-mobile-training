@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'notifications.dart';
 import 'search.dart';
 import 'models.dart';
 import 'services.dart';
@@ -168,7 +169,13 @@ class _EventScreenState extends State<EventScreen> {
               ListTile(
                 leading: const Icon(Icons.calendar_month_rounded),
                 title: const Text('Exportar eventos para o calendário'),
-                onTap: null
+                onTap: () => Notifications.showNotification(
+                  CustomNotification(
+                    id: 1,
+                    title: 'Eae',
+                    body: 'Cool'
+                  )
+                )
               )
             ]
           )
