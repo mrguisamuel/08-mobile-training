@@ -1,0 +1,46 @@
+[  
+  {
+    "description": "Event1",
+    "participants": [
+      "CE",
+      "DCE",
+      "C",
+      "TL"
+    ],
+    "place": "China",
+    "hour": "6 AM",
+    "day": 1
+  },
+  {
+    "description": "Event2",
+    "participants": [
+      "CE",
+      "DCE"
+    ],
+    "place": "USA",
+    "hour": "7 AM",
+    "day": 1
+  },
+  {
+    "description": "Event3",
+    "participants": [
+      "CE",
+      "DCE",
+      "C",
+      "TL"
+    ],
+    "place": "South Korea",
+    "hour": "7 AM",
+    "day": 2
+  },
+  {
+    "description": "Event4",
+    "participants": [
+      "CE",
+      "DCE"
+    ],
+    "place": "Germany",
+    "hour": "8 AM",
+    "day": 3
+  }
+]
