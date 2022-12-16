@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   File? _lastImage;
-  File _watermarkImage;
+  //File _watermarkImage;
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -130,6 +130,7 @@ class _HomeState extends State<Home> {
                       height: size.height * 0.5,
                       child: this._lastImage == null ? Text('tire a foto!') : Image.file(this._lastImage!),
                     ),
+                    /*
                     ElevatedButton(
                       child: Text('Usar essa foto mesmo'),
                       onPressed: () async {
@@ -153,6 +154,7 @@ class _HomeState extends State<Home> {
                         }
                       }
                     ),
+                    */
                     ElevatedButton(
                       child: Text('Abrir Galeria'),
                       onPressed: () async {
