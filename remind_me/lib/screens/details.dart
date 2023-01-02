@@ -9,7 +9,6 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> {
-  Location myLocation = new Location();
   String _locationName = 'Indefinido';
 
   @override
@@ -19,29 +18,22 @@ class _DetailsState extends State<Details> {
   }
 
   Future<void> _setupLocalization() async {
-    var _serviceEnabled = await this.myLocation.serviceEnabled();
-    if(!_serviceEnabled) {
-      _serviceEnabled = await this.myLocation.requestService();
-      if(!_serviceEnabled)
-        return;
-    }
-
-    var _permissionGranted = await this.myLocation.hasPermission();
-    if(_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await this.myLocation.requestPermission();
-      if(_permissionGranted != PermissionStatus.granted)
-        return;
-    }
-
-    // If all checks was positive, then it is going to return the location data
-    LocationData myLocationData = await this.myLocation.getLocation();
-    final coordinates = new Coordinates(
-      myLocationData.latitude, myLocationData.longitude
-    );
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    var first = addresses.first;
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if(!serviceEnabled)
+      return;
     
-    print(' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
+    LocationPermission permission = await Geolocator.checkPermission();
+    if(permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if(permission == LocationPermission.denied)
+        return;
+    }
+
+    if(permission == LocationPermission.deniedForever)
+      return;
+    
+    // If the permission was accepted, it will get the user's location
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
   @override
