@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/welcome.dart';
 import 'screens/pickedphoto.dart';
 import 'screens/editor.dart';
+import 'screens/details.dart';
 /*
 import 'screens/home.dart';
 import 'package:camera/camera.dart';
@@ -30,6 +31,7 @@ void main() {
         '/welcome': (BuildContext context) => const Welcome(),
         '/pickedphoto': (BuildContext context) => const PickedPhoto(),
         '/editor': (BuildContext context) => const Editor(),
+        '/details': (BuildContext context) => const Details()
       }
     )
   );
