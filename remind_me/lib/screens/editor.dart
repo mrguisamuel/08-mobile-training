@@ -13,8 +13,6 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  Uint8List? _imgBytes;
-
   @override
   void initState() {
     super.initState();
@@ -44,11 +42,12 @@ class _EditorState extends State<Editor> {
     final wmImage = ui.encodePng(originalImage);
     final result = Uint8List.fromList(wmImage);
 
-    setState(() => this._imgBytes = result);
+    setState(() => Globals.watermarkedImage = result);
   }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(title: Text('Editor')),
       body: SafeArea(
@@ -56,8 +55,22 @@ class _EditorState extends State<Editor> {
           child: Column(
             children: <Widget>[
               Container(
-                child: this._imgBytes == null ? 
-                CircularProgressIndicator() : Image.memory(this._imgBytes!)
+                width: size.width * 0.9,
+                height: size.height * 0.7,
+                child: Globals.watermarkedImage == null ? 
+                CircularProgressIndicator() : Image.memory(Globals.watermarkedImage!)
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pushReplacementNamed('/details'),
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  width: size.width,
+                  child: Text('Continuar', textAlign: TextAlign.center),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(20)
+                  )
+                )
               )
             ]
           )
