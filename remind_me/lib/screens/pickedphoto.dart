@@ -28,7 +28,7 @@ class _PickedPhotoState extends State<PickedPhoto> {
             Padding(
               padding: const EdgeInsets.only(top: 5),
               child: TextButton(
-                onPressed: null,
+                onPressed: () => Navigator.of(context).pushReplacementNamed('/editor'),
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   width: size.width,
