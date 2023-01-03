@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class Details extends StatefulWidget {
   const Details({Key? key}) : super(key: key);
@@ -32,8 +33,18 @@ class _DetailsState extends State<Details> {
     if(permission == LocationPermission.deniedForever)
       return;
     
-    // If the permission was accepted, it will get the user's location
+    // If the permission was accepted, it will get the user's position
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    await placemarkFromCoordinates(
+      position.latitude, position.longitude
+    ).then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        this._locationName = '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}';
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
   }
 
   @override
@@ -63,10 +74,10 @@ class _DetailsState extends State<Details> {
                   )
                 )
               ),
-              Text(
+              this._locationName != 'Indefinido' ? Text(
                 'Localização: ' + this._locationName,
                 style: TextStyle(fontSize: 15)
-              )
+              ) : CircularProgressIndicator()
             ]
           )
         )
