@@ -3,6 +3,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../providers/database.dart';
+import '../models/wsa_image.dart';
 import 'dart:io';
 
 class Details extends StatefulWidget {
@@ -16,6 +18,7 @@ class _DetailsState extends State<Details> {
   String _locationName = 'Indefinido';
   DateTime _currentTime = new DateTime.now();
   FlutterSoundRecorder _recorder = new FlutterSoundRecorder();
+  TextEditingController _titleController = new TextEditingController();
 
   @override
   void initState() {
@@ -101,6 +104,7 @@ class _DetailsState extends State<Details> {
               Container(
                 width: size.width * 0.8,
                 child: TextFormField(
+                  controller: this._titleController,
                   decoration: InputDecoration(
                     helperText: ''
                   )
@@ -138,7 +142,12 @@ class _DetailsState extends State<Details> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: TextButton(
-                  onPressed: null,
+                  onPressed: () => MyDatabase.insertImage(
+                    WSAImage(
+                      title: this._titleController.text,
+                      location: 
+                    )
+                  ),
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     width: size.width * 0.9,
