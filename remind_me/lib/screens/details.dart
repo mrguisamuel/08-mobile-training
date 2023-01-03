@@ -20,6 +20,9 @@ class _DetailsState extends State<Details> {
   FlutterSoundRecorder _recorder = new FlutterSoundRecorder();
   TextEditingController _titleController = new TextEditingController();
 
+  // Manage date and time without DateTime class
+  String _date = this._currentTime.day + '/'
+
   @override
   void initState() {
     super.initState();
