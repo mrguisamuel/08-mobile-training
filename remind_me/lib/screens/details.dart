@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'dart:io';
 
 class Details extends StatefulWidget {
   const Details({Key? key}) : super(key: key);
@@ -20,13 +21,33 @@ class _DetailsState extends State<Details> {
   void initState() {
     super.initState();
     this._setupLocalization();
+    this._setupRecorder();
+  }
+
+  @override
+  void dispose() {
+    this._recorder.closeRecorder();
+    super.dispose();
   }
 
   Future<void> _setupRecorder() async {
     final status = await Permission.microphone.request();
-    if(status != PermissionStatus.granted) {
+    if(status != PermissionStatus.granted)
       throw 'Microphone permission not granted';
-    }
+    await this._recorder.openRecorder();
+    this._recorder.setSubscriptionDuration(
+      const Duration(milliseconds: 500)
+    );
+  }
+
+  Future<void> _record() async {
+    await this._recorder.startRecorder(toFile: 'audio');
+  }
+
+  Future<void> _stopRecorder() async {
+    final path = await this._recorder.stopRecorder();
+    final audioFile = File(path!);
+    print('Recorded audio: $audioFile');
   }
 
   Future<void> _setupLocalization() async {
@@ -96,9 +117,46 @@ class _DetailsState extends State<Details> {
                   '${this._currentTime.hour}:${this._currentTime.minute}',
                   style: TextStyle(fontSize: 15)
                 ),
-                padding: const EdgeInsets.all(20)
+                padding: const EdgeInsets.all(10)
               ),
-
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: ElevatedButton(
+                  child: Icon(
+                    this._recorder.isRecording ? Icons.stop : Icons.mic,
+                    size: 80
+                  ),
+                  onPressed: () async {
+                    if(this._recorder.isRecording)
+                      await this._stopRecorder();
+                    else
+                      await this._record();
+                    setState(() { });
+                  }
+                )
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: TextButton(
+                  onPressed: null,
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    width: size.width * 0.9,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(20)
+                    ),
+                    child: Text(
+                      'Enviar',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15
+                      )
+                    )
+                  )
+                )
+              )
             ]
           )
         )
