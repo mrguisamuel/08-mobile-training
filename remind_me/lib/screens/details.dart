@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Details extends StatefulWidget {
   const Details({Key? key}) : super(key: key);
@@ -12,11 +14,19 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   String _locationName = 'Indefinido';
   DateTime _currentTime = new DateTime.now();
+  FlutterSoundRecorder _recorder = new FlutterSoundRecorder();
 
   @override
   void initState() {
     super.initState();
     this._setupLocalization();
+  }
+
+  Future<void> _setupRecorder() async {
+    final status = await Permission.microphone.request();
+    if(status != PermissionStatus.granted) {
+      throw 'Microphone permission not granted';
+    }
   }
 
   Future<void> _setupLocalization() async {
@@ -88,7 +98,7 @@ class _DetailsState extends State<Details> {
                 ),
                 padding: const EdgeInsets.all(20)
               ),
-              
+
             ]
           )
         )
