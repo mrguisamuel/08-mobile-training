@@ -32,7 +32,11 @@ class _PickedPhotoState extends State<PickedPhoto> {
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   width: size.width,
-                  child: Text('Continuar', textAlign: TextAlign.center),
+                  child: Text(
+                    'Continuar', 
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white)
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(20)
@@ -47,7 +51,11 @@ class _PickedPhotoState extends State<PickedPhoto> {
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   width: size.width,
-                  child: Text('Voltar', textAlign: TextAlign.center),
+                  child: Text(
+                    'Voltar', 
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white)
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(20)

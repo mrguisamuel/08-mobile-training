@@ -65,7 +65,11 @@ class _EditorState extends State<Editor> {
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   width: size.width,
-                  child: Text('Continuar', textAlign: TextAlign.center),
+                  child: Text(
+                    'Continuar', 
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white)
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(20)
