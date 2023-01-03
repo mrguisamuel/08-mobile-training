@@ -11,6 +11,7 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   String _locationName = 'Indefinido';
+  DateTime _currentTime = new DateTime.now();
 
   @override
   void initState() {
@@ -77,7 +78,17 @@ class _DetailsState extends State<Details> {
               this._locationName != 'Indefinido' ? Text(
                 'Localização: ' + this._locationName,
                 style: TextStyle(fontSize: 15)
-              ) : CircularProgressIndicator()
+              ) : CircularProgressIndicator(),
+              Padding(
+                child: Text(
+                  'Data: ' +
+                  '${this._currentTime.day}/${this._currentTime.month}/${this._currentTime.year} - '+ 
+                  '${this._currentTime.hour}:${this._currentTime.minute}',
+                  style: TextStyle(fontSize: 15)
+                ),
+                padding: const EdgeInsets.all(20)
+              ),
+              
             ]
           )
         )
