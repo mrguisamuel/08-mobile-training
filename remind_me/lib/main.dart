@@ -34,7 +34,7 @@ void main() {
         '/pickedphoto': (BuildContext context) => const PickedPhoto(),
         '/editor': (BuildContext context) => const Editor(),
         '/details': (BuildContext context) => const Details(),
-        '/image_viewer': (BuildContext context) => const ImageViewer(),
+        //'/image_viewer': (BuildContext context) => const ImageViewer(),
         '/gallery': (BuildContext context) => const Gallery(),
       }
     )
