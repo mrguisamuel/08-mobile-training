@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../providers/database.dart';
 import '../models/wsa_image.dart';
 import '../utils/globals.dart';
@@ -151,16 +152,23 @@ class _DetailsState extends State<Details> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: TextButton(
-                  onPressed: () async => MyDatabase.insertImage(
-                    WSAImage(
-                      title: this._titleController.text,
-                      location: this._locationName,
-                      time: this._time,
-                      date: this._date,
-                      image: Globals.watermarkedImage!,
-                      audio: await this._audio!.readAsBytes()
-                    )
-                  ),
+                  onPressed: () async {
+                    await MyDatabase.insertImage(
+                      WSAImage(
+                        title: this._titleController.text,
+                        location: this._locationName,
+                        time: this._time,
+                        date: this._date,
+                        image: Globals.watermarkedImage!,
+                        audio: await this._audio!.readAsBytes()
+                      )
+                    );
+                    Navigator.of(context).pushReplacementNamed('/image_viewer');
+                    Fluttertoast.showToast(
+                      msg: 'Enviado com sucesso!',
+                      fontSize: 16.0
+                    );
+                  },
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     width: size.width * 0.9,
