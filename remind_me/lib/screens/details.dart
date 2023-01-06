@@ -5,6 +5,7 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../providers/database.dart';
 import '../models/wsa_image.dart';
+import '../utils/globals.dart';
 import 'dart:io';
 
 class Details extends StatefulWidget {
@@ -19,9 +20,16 @@ class _DetailsState extends State<Details> {
   DateTime _currentTime = new DateTime.now();
   FlutterSoundRecorder _recorder = new FlutterSoundRecorder();
   TextEditingController _titleController = new TextEditingController();
+  File? _audio;
 
-  // Manage date and time without DateTime class
-  String _date = this._currentTime.day + '/'
+  String _date = 'XX/YY/ZZZZ';
+  String _time = 'XX:YY';
+
+  _DetailsState() {
+    // Save date and time as string
+    _date = '${_currentTime.day.toString()}/${_currentTime.month.toString()}/${_currentTime.year.toString()}';
+    _time = '${_currentTime.hour.toString()}:${_currentTime.minute.toString()}';
+  }
 
   @override
   void initState() {
@@ -52,8 +60,8 @@ class _DetailsState extends State<Details> {
 
   Future<void> _stopRecorder() async {
     final path = await this._recorder.stopRecorder();
-    final audioFile = File(path!);
-    print('Recorded audio: $audioFile');
+    this._audio = File(path!);
+    print('Recorded audio: $_audio');
   }
 
   Future<void> _setupLocalization() async {
@@ -119,9 +127,7 @@ class _DetailsState extends State<Details> {
               ) : CircularProgressIndicator(),
               Padding(
                 child: Text(
-                  'Data: ' +
-                  '${this._currentTime.day}/${this._currentTime.month}/${this._currentTime.year} - '+ 
-                  '${this._currentTime.hour}:${this._currentTime.minute}',
+                  'Data: ${this._date}, às ${this._time}',
                   style: TextStyle(fontSize: 15)
                 ),
                 padding: const EdgeInsets.all(10)
@@ -145,10 +151,14 @@ class _DetailsState extends State<Details> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: TextButton(
-                  onPressed: () => MyDatabase.insertImage(
+                  onPressed: () async => MyDatabase.insertImage(
                     WSAImage(
                       title: this._titleController.text,
-                      location: 
+                      location: this._locationName,
+                      time: this._time,
+                      date: this._date,
+                      image: Globals.watermarkedImage!,
+                      audio: await this._audio!.readAsBytes()
                     )
                   ),
                   child: Container(
