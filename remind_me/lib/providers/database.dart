@@ -31,7 +31,15 @@ class MyDatabase {
   }
 
   static Future<void> insertImage(WSAImage image) async {
-    final db = await MyDatabase.instance.database;
+    final db = await instance.database;
     await db.insert('saveimages', image.toMap());
+  }
+
+  static Future<List<WSAImage>> getAllImages() async {
+    final db = await instance.database;
+    final List<Map<String, dynamic>> queryResult = await db.query(
+      'saveimages', orderBy: 'id'
+    );
+    return queryResult.map((element) => WSAImage.fromMap(element)).toList();
   }
 }
