@@ -165,7 +165,7 @@ class _DetailsState extends State<Details> {
                     );
                     Navigator.of(context).pushReplacementNamed('/gallery');
                     Fluttertoast.showToast(
-                      msg: 'Enviado com sucesso!',
+                      msg: 'Foto salva com sucesso!',
                       fontSize: 16.0
                     );
                   },
