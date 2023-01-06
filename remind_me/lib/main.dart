@@ -3,6 +3,7 @@ import 'screens/welcome.dart';
 import 'screens/pickedphoto.dart';
 import 'screens/editor.dart';
 import 'screens/details.dart';
+import 'screens/gallery.dart';
 import 'screens/image_viewer.dart';
 /*
 import 'screens/home.dart';
@@ -33,7 +34,8 @@ void main() {
         '/pickedphoto': (BuildContext context) => const PickedPhoto(),
         '/editor': (BuildContext context) => const Editor(),
         '/details': (BuildContext context) => const Details(),
-        '/image_viewer': (BuildContext context) => const ImageViewer()
+        '/image_viewer': (BuildContext context) => const ImageViewer(),
+        '/gallery': (BuildContext context) => const Gallery(),
       }
     )
   );
