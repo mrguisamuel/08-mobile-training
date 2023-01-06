@@ -163,7 +163,7 @@ class _DetailsState extends State<Details> {
                         audio: await this._audio!.readAsBytes()
                       )
                     );
-                    Navigator.of(context).pushReplacementNamed('/image_viewer');
+                    Navigator.of(context).pushReplacementNamed('/gallery');
                     Fluttertoast.showToast(
                       msg: 'Enviado com sucesso!',
                       fontSize: 16.0

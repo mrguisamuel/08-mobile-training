@@ -48,7 +48,7 @@ class _WelcomeState extends State<Welcome> {
                 )
               ),
               TextButton(
-                onPressed: null,
+                onPressed: () => Navigator.of(context).pushReplacementNamed('/gallery'),
                 child: Container(
                   width: size.width,
                   decoration: BoxDecoration(
