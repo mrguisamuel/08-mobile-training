@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'dart:typed_data';
 
 class ImageViewer extends StatefulWidget {
@@ -25,6 +26,32 @@ class ImageViewer extends StatefulWidget {
 }
 
 class _ImageViewerState extends State<ImageViewer> {
+  final _audioPlayer = AudioPlayer();
+
+  @override
+  ImageViewer get widget => super.widget;
+
+  Future<void> playAudio() async {
+    try {
+      this._audioPlayer.play(BytesSource(widget.audio));
+      print('Error while playing audio');
+    } catch(e) {
+      print('Audio is playing');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.playAudio();
+  }
+
+  @override
+  void dispose() {
+    this._audioPlayer.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
