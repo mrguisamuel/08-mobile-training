@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/wsa_image.dart';
 import '../providers/database.dart';
+import '../screens/image_viewer.dart' show ImageViewer;
 
 class Gallery extends StatefulWidget {
   const Gallery({Key? key}) : super(key: key);
@@ -32,7 +33,21 @@ class _GalleryState extends State<Gallery> {
               GridView.count(
                 crossAxisCount: 2,
                 children: snapshot.data!.map((wsaImage) {
-                  return Container(child: Image.memory(wsaImage.image));
+                  return GestureDetector(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ImageViewer(
+                          image: wsaImage.image,
+                          audio: wsaImage.audio,
+                          title: wsaImage.title,
+                          location: wsaImage.location,
+                          date: wsaImage.date,
+                          time: wsaImage.time
+                        )
+                      )
+                    ),
+                    child: Container(child: Image.memory(wsaImage.image))
+                  );
                 }).toList()
               );
             }
