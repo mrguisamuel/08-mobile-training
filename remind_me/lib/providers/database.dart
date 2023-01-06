@@ -20,8 +20,10 @@ class MyDatabase {
           id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
           title TEXT NOT NULL,
           location TEXT NOT NULL,
-          images BLOB NOT NULL,
-          audio BLOB NOT NULL
+          image BLOB NOT NULL,
+          audio BLOB NOT NULL,
+          time TEXT NOT NULL,
+          date TEXT NOT NULL
         );
         '''
       )
