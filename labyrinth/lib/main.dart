@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'game.dart';
+import 'home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,9 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/game',
+      initialRoute: '/home',
       routes: {
-        '/game': (BuildContext context) => const Game()
+        '/game': (BuildContext context) => const Game(),
+        '/home': (BuildContext context) => const Home()
       }
     );
   }
