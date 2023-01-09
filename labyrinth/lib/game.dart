@@ -20,14 +20,8 @@ class _GameState extends State<Game> {
     super.initState();
 
     // Listen Gyroscope
-    motionSensors.gyroscope.listen((GyroscopeEvent event) {
+    motionSensors.userAccelerometer.listen((UserAccelerometerEvent event) {
       setState(() {
-        if(event.z != 0)
-          distanceX += this._playerPos.z;
-
-        if(event.x != 0)
-          distanceY += this._playerPos.x;
-
         this._playerPos.setValues(event.x * playerSpeed, event.y, event.z * playerSpeed);
       });
     });
