@@ -13,7 +13,7 @@ class Home extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             TextButton(
-              onPressed: null,
+              onPressed: () => Navigator.of(context).pushReplacementNamed('/game'),
               child: Container(
                 width: size.width * 0.9,
                 padding: const EdgeInsets.all(20),
