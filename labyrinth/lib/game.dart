@@ -10,13 +10,21 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  Vector3 _gyroscope = Vector3.zero();
+  Vector3 _playerPos = Vector3.zero();
+  double distance = 0;
 
   @override
   void initState() {
     super.initState();
+
+    // Listen Gyroscope
     motionSensors.gyroscope.listen((GyroscopeEvent event) {
-      setState(() => this._gyroscope.setValues(event.x, event.y, event.z));
+      setState(() {
+        if(event.x != 0)
+          distance += this._playerPos.x;
+
+        this._playerPos.setValues(event.x * 20, event.y, event.z);
+      });
     });
   }
 
@@ -24,13 +32,13 @@ class _GameState extends State<Game> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(this._gyroscope.x.toString()),
+        title: Text(distance.toString()),
       ),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
             Positioned(
-              top: 50,
+              right: this.distance, 
               child: Container(
                 width: 40,
                 height: 40,
