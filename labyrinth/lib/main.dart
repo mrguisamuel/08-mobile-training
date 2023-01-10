@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'game.dart';
 import 'home.dart';
+import 'records.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/game',
       routes: {
         '/game': (BuildContext context) => const Game(),
-        '/home': (BuildContext context) => const Home()
+        '/home': (BuildContext context) => const Home(),
+        '/records': (BuildContext context) => const Records()
       }
     );
   }

@@ -32,7 +32,7 @@ class Home extends StatelessWidget {
               )
             ),
             TextButton(
-              onPressed: null,
+              onPressed: () => Navigator.of(context).pushReplacementNamed('/records'),
               child: Container(
                 width: size.width * 0.9,
                 padding: const EdgeInsets.all(20),
