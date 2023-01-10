@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' hide Colors;
-import 'package:motion_sensors/motion_sensors.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 class Game extends StatefulWidget {
   const Game({Key? key}) : super(key: key);
@@ -13,16 +13,18 @@ class _GameState extends State<Game> {
   Vector3 _playerPos = Vector3.zero();
   double distanceX = 0;
   double distanceY = 0;
-  final int playerSpeed = 20;
+  final int playerSpeed = 40;
 
   @override
   void initState() {
     super.initState();
 
-    // Listen Gyroscope
-    motionSensors.userAccelerometer.listen((UserAccelerometerEvent event) {
+    userAccelerometerEvents.listen((UserAccelerometerEvent event) {
       setState(() {
-        this._playerPos.setValues(event.x * playerSpeed, event.y, event.z * playerSpeed);
+        distanceX -= this._playerPos.x;
+        distanceY -= this._playerPos.y;
+
+        this._playerPos.setValues(event.x * playerSpeed, event.y * playerSpeed, event.z);
       });
     });
   }
@@ -37,7 +39,8 @@ class _GameState extends State<Game> {
         child: Stack(
           children: <Widget>[
             Positioned(
-              right: this.distanceX, 
+              right: this.distanceX,
+              top: this.distanceY,
               child: Container(
                 width: 40,
                 height: 40,
