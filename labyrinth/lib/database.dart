@@ -2,21 +2,17 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Record {
-  final int points;
-  final String time;
+  final int time;
   
   Record({
-    required this.points,
-    required this.time
+    required this.time,
   });
 
   factory Record.fromMap(Map<String, dynamic> map) => Record(
-    points: map['points'],
-    time: map['time']
+    time: map['time'],
   );
 
   Map<String, dynamic> toMap() => {
-    'points': this.points,
     'time': this.time
   };
 }
@@ -38,7 +34,6 @@ class MyDatabase {
         CREATE TABLE records(
           id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
           time TEXT NOT NULL,
-          points INTEGER NOT NULL
         );
         '''
       )
@@ -53,7 +48,7 @@ class MyDatabase {
   static Future<List<Record>> getAllRecords() async {
     final db = await instance.database;
     final List<Map<String, dynamic>> queryResult = await db.query(
-      'SELECT * FROM record ORDER BY points DESC'
+      'SELECT * FROM record ORDER BY time DESC'
     );
     List<Record> records = queryResult.isNotEmpty ?
     queryResult.map((element) => Record.fromMap(element)).toList() : [];
