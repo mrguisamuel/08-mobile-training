@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' hide Colors;
 import 'package:sensors_plus/sensors_plus.dart';
 import 'elements.dart';
+import 'dart:async';
 
 class Game extends StatefulWidget {
   const Game({Key? key}) : super(key: key);
@@ -20,7 +21,6 @@ class _GameState extends State<Game> {
   @override
   void initState() {
     super.initState();
-
     userAccelerometerEvents.listen((UserAccelerometerEvent event) {
       setState(() {
         distanceX -= (event.x * this.playerSpeed);
@@ -34,6 +34,7 @@ class _GameState extends State<Game> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
